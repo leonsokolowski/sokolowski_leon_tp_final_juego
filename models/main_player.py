@@ -1,10 +1,11 @@
 from auxiliar.animar_sprite import SurfaceManager as sf
 import pygame as pg
 from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
+from models.proyectil import Proyectil
 
 class Jugador:
     def __init__(self, coord_x, coord_y, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 32):
-        
+        #animacion
         self.__iddle_r = sf.get_surface_from_spritesheeet(r"assets\img\player\iddle\iddle.png", 7, 1)
         self.__iddle_l = sf.get_surface_from_spritesheeet(r"assets\img\player\iddle\iddle.png", 7, 1, flip = True)
         self.__walk_r = sf.get_surface_from_spritesheeet(r"assets\img\player\walk\walk.png", 8, 1)
@@ -13,23 +14,32 @@ class Jugador:
         self.__jump_l = sf.get_surface_from_spritesheeet(r"assets\img\player\jump\jump.png", 9, 1, flip = True)
         self.__run_r = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1)
         self.__run_l = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1, flip = True)
+        self.__player_animation_time = 0
+        self.__inital_frame = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
+        self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
+        self.__actual_image_animation = self.__actual_animation[self.__inital_frame] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
+        
+        #movimiento
         self.__move_x = coord_x
         self.__move_y = coord_y
         self.__speed_walk = speed_walk
         self.__speed_run = speed_run
         self.__frame_rate = frame_rate
         self.__player_move_time = 0
-        self.__player_animation_time = 0
         self.__gravity = gravity
         self.__jump = jump
         self.__is_jumping = False
         self.__is_landing = False
         self.__is_on_land = True
-        self.__inital_frame = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
-        self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
-        self.__actual_image_animation = self.__actual_animation[self.__inital_frame] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
         self.__rect = self.__actual_image_animation.get_rect()
         self.__is_looking_right = True
+        
+        #disparo
+        self.ready = True
+        self.laser_time = 0
+        self.laser_cooldown = 600
+        self.bullet_group = pg.sprite.Group()
+        self.puntaje = 0
         
     @property
     def obtener_estado_jumping (self):
@@ -127,6 +137,27 @@ class Jugador:
                 self.__inital_frame += 1
             else:
                 self.__inital_frame = 0
+    
+    
+    @property
+    def get_bullets(self) -> list[Proyectil]:
+        return self.bullet_group
+    
+    def shoot_laser(self):  # disparar laser
+        print('!piu piu!')
+        self.bullet_group.add(self.create_bullet())
+    
+    def create_bullet(self):
+        if self.__is_looking_right:
+            return Proyectil(self.rect.centerx, self.rect.top, 'right', True) # Crea y devuelve un objeto de la clase Bullet en la posición actual del ratón
+        if self.__is_looking_right == False:
+            return Proyectil(self.rect.centerx, self.rect.top, 'left', True)
+    def recharge(self):
+        if not self.ready:
+            curent_time = pg.time.get_ticks()
+            if curent_time - self.laser_time >= self.laser_cooldown:
+                self.ready = True
+    
     
     def update(self, delta_ms):
         self.do_movement(delta_ms)
