@@ -1,7 +1,7 @@
 import pygame as pg
-from models.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS)
-from models.player.main_player import Jugador
-from models.enemy.enemy import Enemigo
+from auxiliar.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS)
+from models.main_player import Jugador
+from models.enemy import Enemigo
 
 pantalla = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pg.init()
@@ -25,9 +25,6 @@ while ejecucion:
     for event in lista_eventos:
         
         match event.type:
-            # case pg.KEYDOWN:
-            #     if event.key == pg.K_UP:
-            #         finn.jump()
             case pg.QUIT:
                 print("Estoy CERRANDO el juego")
                 ejecucion = False
