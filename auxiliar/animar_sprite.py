@@ -1,5 +1,4 @@
 import pygame as pg
-from models.constantes import ANCHO_VENTANA, ALTO_VENTANA
 class SurfaceManager:
     
     @staticmethod
