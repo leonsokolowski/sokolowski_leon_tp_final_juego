@@ -42,10 +42,14 @@ while ejecucion:
         finn.run("Left")
     if lista_teclas_presionadas[pg.K_UP]:
         finn.jump()
+    if lista_teclas_presionadas[pg.K_SPACE]:
+        finn.shoot()
+        finn.ready = False
+        finn.projectile_time = pg.time.get_ticks()
         
-    print("Is on land: ", finn.obtener_estado_on_land)
-    print("Is landing: ", finn.obtener_estado_landing)
-    print("Is jumping: ", finn.obtener_estado_jumping)
+    #print("Is on land: ", finn.obtener_estado_on_land)
+    #print("Is landing: ", finn.obtener_estado_landing)
+    #print("Is jumping: ", finn.obtener_estado_jumping)
     
     momento_actual =  pg.time.get_ticks() // 1000
     if momento_actual > momento_anterior:
@@ -68,6 +72,7 @@ while ejecucion:
     finn.draw(pantalla)
     rey_helado.update(delta_ms)
     rey_helado.draw(pantalla)
+    finn.projectile_group.draw(pantalla)
     pg.display.update()
 
 pg.quit()

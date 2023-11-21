@@ -14,6 +14,8 @@ class Jugador:
         self.__jump_l = sf.get_surface_from_spritesheeet(r"assets\img\player\jump\jump.png", 9, 1, flip = True)
         self.__run_r = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1)
         self.__run_l = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1, flip = True)
+        self.__shoot_r = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1)
+        self.__shoot_l = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1, flip = True)
         self.__player_animation_time = 0
         self.__inital_frame = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
@@ -36,9 +38,9 @@ class Jugador:
         
         #disparo
         self.ready = True
-        self.laser_time = 0
-        self.laser_cooldown = 600
-        self.bullet_group = pg.sprite.Group()
+        self.projectile_time = 0
+        self.projectile_cooldown =100000
+        self.projectile_group = pg.sprite.Group()
         self.puntaje = 0
         
     @property
@@ -117,6 +119,28 @@ class Jugador:
         elif self.__move_y < 0:
             pixels_move = self.__move_y if self.__rect.top > 0 else 0
         return pixels_move
+    @property
+    def get_projectiles(self) -> list[Proyectil]:
+        return self.projectile_group
+    
+    def shoot(self):  
+        print('!shink!')
+        self.projectile_group.add(self.create_projectile())
+    
+    def create_projectile(self):
+        if self.__is_looking_right:
+            self.__actual_animation = self.__shoot_r
+            #self.__inital_frame = 0
+            return Proyectil(self.__rect.right, self.__rect.centery, 'right', True)
+        if self.__is_looking_right == False:
+            self.__actual_animation = self.__shoot_l
+            #self.__inital_frame = 0
+            return Proyectil(self.__rect.left, self.__rect.centery, 'left', True)
+    def recharge(self):
+        if not self.ready:
+            curent_time = pg.time.get_ticks()
+            if curent_time - self.projectile_time >= self.projectile_cooldown:
+                self.ready = True
     
     def do_movement(self, delta_ms): #Relacionado al movimiento
         self.__player_move_time += delta_ms
@@ -139,29 +163,13 @@ class Jugador:
                 self.__inital_frame = 0
     
     
-    @property
-    def get_bullets(self) -> list[Proyectil]:
-        return self.bullet_group
-    
-    def shoot_laser(self):  # disparar laser
-        print('!piu piu!')
-        self.bullet_group.add(self.create_bullet())
-    
-    def create_bullet(self):
-        if self.__is_looking_right:
-            return Proyectil(self.rect.centerx, self.rect.top, 'right', True) # Crea y devuelve un objeto de la clase Bullet en la posición actual del ratón
-        if self.__is_looking_right == False:
-            return Proyectil(self.rect.centerx, self.rect.top, 'left', True)
-    def recharge(self):
-        if not self.ready:
-            curent_time = pg.time.get_ticks()
-            if curent_time - self.laser_time >= self.laser_cooldown:
-                self.ready = True
     
     
     def update(self, delta_ms):
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
+        self.recharge()
+        self.projectile_group.update()
     
     def draw(self, screen : pg.surface.Surface):
         if DEBUG:

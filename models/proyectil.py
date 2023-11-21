@@ -7,6 +7,7 @@ class Proyectil(pygame.sprite.Sprite):
         self.__load_img(img_path_player)
         self.rect = self.image.get_rect(center=(pos_x, pos_y))
         self.direction = direction
+        
 
     def __load_img(self, img_path: bool):
         if img_path:
