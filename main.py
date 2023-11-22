@@ -12,7 +12,7 @@ imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTA
 
 ejecucion = True
 
-finn = Jugador(0, 0, frame_rate= 70, speed_walk= 10, speed_run= 20)
+finn = Jugador(700, 350,  frame_rate= 70, speed_walk= 10, speed_run= 20)
 rey_helado = Enemigo(0,0, frame_rate=70, speed_walk= 10, speed_run=20)
 bandera_tiempo = True
 
@@ -34,7 +34,7 @@ while ejecucion:
         finn.walk("Right")
     if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT]:
         finn.walk("Left")
-    if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
+    if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_SPACE]:
         finn.stay()
     if lista_teclas_presionadas[pg.K_RIGHT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_LEFT]:
         finn.run("Right")
@@ -44,8 +44,7 @@ while ejecucion:
         finn.jump()
     if lista_teclas_presionadas[pg.K_SPACE]:
         finn.shoot()
-        finn.ready = False
-        finn.projectile_time = pg.time.get_ticks()
+        
         
     #print("Is on land: ", finn.obtener_estado_on_land)
     #print("Is landing: ", finn.obtener_estado_landing)
@@ -70,9 +69,9 @@ while ejecucion:
     delta_ms= reloj.tick(FPS)
     finn.update(delta_ms)
     finn.draw(pantalla)
+    finn.projectile_group.draw(pantalla)
     rey_helado.update(delta_ms)
     rey_helado.draw(pantalla)
-    finn.projectile_group.draw(pantalla)
     pg.display.update()
 
 pg.quit()

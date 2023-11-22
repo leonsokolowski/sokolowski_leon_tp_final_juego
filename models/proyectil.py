@@ -2,16 +2,18 @@ import pygame
 from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA
 
 class Proyectil(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, direction, img_path_player = False):
+    def __init__(self, pos_x, pos_y, direction, img_path_player = False, flip : bool = False):
         super().__init__()
+        self.flip = flip
         self.__load_img(img_path_player)
         self.rect = self.image.get_rect(center=(pos_x, pos_y))
         self.direction = direction
-        
 
     def __load_img(self, img_path: bool):
         if img_path:
             self.image = pygame.image.load(r"assets\img\player\proyectil\tajo_espada.png")
+            if self.flip:
+                self.image = pygame.transform.flip(self.image, True, False)
         else: 
             self.image = pygame.image.load(r"assets\img\enemy\proyectil\tempano.png")
 
@@ -30,7 +32,7 @@ class Proyectil(pygame.sprite.Sprite):
                 self.rect.y += 20
                 if self.rect.y >= ALTO_VENTANA:
                     self.kill()
-            case "down":
-                self.rect.y -= 20
-                if self.rect.y <= 0:
-                    self.kill()
+            # case "down":
+            #     self.rect.y -= 20
+            #     if self.rect.y <= 0:
+            #         self.kill()

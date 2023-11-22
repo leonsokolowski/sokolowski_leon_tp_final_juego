@@ -22,8 +22,8 @@ class Jugador:
         self.__actual_image_animation = self.__actual_animation[self.__inital_frame] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
         
         #movimiento
-        self.__move_x = coord_x
-        self.__move_y = coord_y
+        self.__move_x = 0
+        self.__move_y = 0
         self.__speed_walk = speed_walk
         self.__speed_run = speed_run
         self.__frame_rate = frame_rate
@@ -34,14 +34,15 @@ class Jugador:
         self.__is_landing = False
         self.__is_on_land = True
         self.__rect = self.__actual_image_animation.get_rect()
+        self.__rect.x = coord_x
+        self.__rect.y = coord_y
         self.__is_looking_right = True
         
         #disparo
         self.ready = True
         self.projectile_time = 0
-        self.projectile_cooldown =100000
+        self.projectile_cooldown = 550
         self.projectile_group = pg.sprite.Group()
-        self.puntaje = 0
         
     @property
     def obtener_estado_jumping (self):
@@ -107,7 +108,7 @@ class Jugador:
     def __set_borders_limit_x(self): #Relacionado al movimiento
         pixels_move = 0
         if self.__move_x > 0:
-            pixels_move = self.__move_x if self.__rect.right < ANCHO_VENTANA else 0
+            pixels_move = self.__move_x if self.__rect.right < ANCHO_VENTANA - self.__actual_image_animation.get_width()/5 else 0
         elif self.__move_x < 0:
             pixels_move = self.__move_x if self.__rect.left > 0 else 0
         return pixels_move
@@ -125,8 +126,11 @@ class Jugador:
     
     def shoot(self):  
         print('!shink!')
-        self.projectile_group.add(self.create_projectile())
-    
+        if self.ready:
+            self.projectile_group.add(self.create_projectile())
+            self.ready = False
+            self.projectile_time = pg.time.get_ticks()
+        
     def create_projectile(self):
         if self.__is_looking_right:
             self.__actual_animation = self.__shoot_r
@@ -135,7 +139,7 @@ class Jugador:
         if self.__is_looking_right == False:
             self.__actual_animation = self.__shoot_l
             #self.__inital_frame = 0
-            return Proyectil(self.__rect.left, self.__rect.centery, 'left', True)
+            return Proyectil(self.__rect.left, self.__rect.centery, 'left', True, True)
     def recharge(self):
         if not self.ready:
             curent_time = pg.time.get_ticks()
@@ -149,7 +153,7 @@ class Jugador:
             self.__rect.x += self.__set_borders_limit_x()
             self.__rect.y += self.__set_borders_limit_y()
             #Parte relacionada a saltar
-            if self.__rect.y < 500:
+            if self.__rect.y < 400:
                 self.__rect.y += self.__gravity
 
     
