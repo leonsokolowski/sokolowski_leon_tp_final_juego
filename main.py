@@ -12,7 +12,7 @@ imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTA
 
 ejecucion = True
 
-finn = Jugador(700, 350,  frame_rate= 70, speed_walk= 10, speed_run= 20)
+finn = Jugador(700, 350,         frame_rate= 70, speed_walk= 10, speed_run= 20)
 rey_helado = Enemigo(0,0, frame_rate=70, speed_walk= 10, speed_run=20)
 bandera_tiempo = True
 
@@ -42,8 +42,8 @@ while ejecucion:
         finn.run("Left")
     if lista_teclas_presionadas[pg.K_UP]:
         finn.jump()
-    if lista_teclas_presionadas[pg.K_SPACE]:
-        finn.shoot()
+    if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
+        finn.shoot() 
         
         
     #print("Is on land: ", finn.obtener_estado_on_land)
