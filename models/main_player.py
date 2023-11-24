@@ -17,9 +17,9 @@ class Jugador:
         self.__shoot_r = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1)
         self.__shoot_l = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1, flip = True)
         self.__player_animation_time = 0
-        self.__inital_frame = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
+        self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
-        self.__actual_image_animation = self.__actual_animation[self.__inital_frame] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
+        self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
         
         #movimiento
         self.__move_x = 0
@@ -39,7 +39,6 @@ class Jugador:
         self.__is_looking_right = True
         
         #disparo
-        self.ready = True
         self.projectile_time = 0
         self.projectile_cooldown = 550
         self.projectile_group = pg.sprite.Group()
@@ -57,14 +56,16 @@ class Jugador:
     
     def __set_x_animations_preset(self, move_x, animation_list : list[pg.surface.Surface], look_r : bool):
         self.__move_x = move_x
-        self.__actual_animation = animation_list
         self.__is_looking_right = look_r
+        if self.__actual_animation != animation_list:
+            self.__actual_frame_index = 0
+            self.__actual_animation = animation_list
     
     def __set_y_animations_preset(self):
         self.__move_y = -self.__jump
         self.__move_x = self.__speed_run if self.__is_looking_right else -self.__speed_run
         self.__actual_animation = self.__jump_r if self.__is_looking_right else self.__jump_l
-        self.__inital_frame = 0
+        self.__actual_frame_index = 0
         self.__is_jumping = True
     
     def jump(self): 
@@ -100,7 +101,7 @@ class Jugador:
     def stay(self):
         if self.__actual_animation != self.__iddle_l and self.__actual_animation != self.__iddle_r:
             self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l
-            self.__inital_frame = 0
+            self.__actual_frame_index = 0
             self.__move_x = 0
             self.__move_y = 0
       
@@ -126,25 +127,37 @@ class Jugador:
     
     def shoot(self):  
         print('!shink!')
-        if self.ready:
+        if self.cooldown_to_shoot():
+            self.shoot_animation()
             self.projectile_group.add(self.create_projectile())
-            self.ready = False
             self.projectile_time = pg.time.get_ticks()
+   
+    def shoot_animation(self):
+        if self.__actual_animation != self.__shoot_r and self.__actual_animation != self.__shoot_l:
+                if self.__is_looking_right:
+                    self.__actual_animation = self.__shoot_r
+                else:
+                    self.__actual_animation = self.__shoot_l
+                #self.__actual_frame_index = 0   
         
     def create_projectile(self):
         if self.__is_looking_right:
-            self.__actual_animation = self.__shoot_r
-            #self.__inital_frame = 0
-            return Proyectil(self.__rect.right, self.__rect.centery, 'right', True)
-        if self.__is_looking_right == False:
-            self.__actual_animation = self.__shoot_l
-            #self.__inital_frame = 0
-            return Proyectil(self.__rect.left, self.__rect.centery, 'left', True, True)
-    def recharge(self):
-        if not self.ready:
-            curent_time = pg.time.get_ticks()
-            if curent_time - self.projectile_time >= self.projectile_cooldown:
-                self.ready = True
+            rect_direction = self.__rect.right
+            direction = "right"
+        else:
+            rect_direction = self.__rect.left
+            direction = "left"
+        return Proyectil(rect_direction, self.__rect.centery, direction, "player", not self.__is_looking_right)
+
+    def cooldown_to_shoot (self) -> bool:
+        current_time= pg.time.get_ticks()
+        return current_time - self.projectile_time >= self.projectile_cooldown
+        
+    # def recharge(self):
+    #     if not self.ready:
+    #         curent_time = pg.time.get_ticks()
+    #         if curent_time - self.projectile_time >= self.projectile_cooldown:
+    #             self.ready = True
     
     def do_movement(self, delta_ms): #Relacionado al movimiento
         self.__player_move_time += delta_ms
@@ -153,7 +166,7 @@ class Jugador:
             self.__rect.x += self.__set_borders_limit_x()
             self.__rect.y += self.__set_borders_limit_y()
             #Parte relacionada a saltar
-            if self.__rect.y < 400:
+            if self.__rect.y < 450:
                 self.__rect.y += self.__gravity
 
     
@@ -161,22 +174,22 @@ class Jugador:
         self.__player_animation_time += delta_ms
         if self.__player_animation_time >= self.__frame_rate:
             self.__player_animation_time = 0
-            if self.__inital_frame < len(self.__actual_animation) - 1:
-                self.__inital_frame += 1
+            if self.__actual_frame_index < len(self.__actual_animation) - 1:
+                self.__actual_frame_index += 1
             else:
-                self.__inital_frame = 0
+                self.__actual_frame_index = 0
     
     
     
     
-    def update(self, delta_ms):
+    def update(self, delta_ms, screen: pg.surface.Surface):
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
-        self.recharge()
-        self.projectile_group.update()
+        self.projectile_group.update(screen)
+        self.draw(screen)
     
     def draw(self, screen : pg.surface.Surface):
         if DEBUG:
             pg.draw.rect(screen, "red", self.__rect)
-        self.__actual_image_animation = self.__actual_animation[self.__inital_frame]
+        self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index]
         screen.blit(self.__actual_image_animation, self.__rect)   

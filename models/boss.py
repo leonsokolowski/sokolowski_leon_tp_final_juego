@@ -2,7 +2,7 @@ from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
 from auxiliar.animar_sprite import SurfaceManager as sf
 import pygame as pg
 
-class Enemigo:
+class Boss:
     def __init__(self, coord_x, coord_y, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 16, jump = 32):
         
         self.__iddle_r = sf.get_surface_from_spritesheeet(r"assets\img\enemy\iddle\iddle.png", 6, 1)
