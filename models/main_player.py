@@ -3,19 +3,24 @@ import pygame as pg
 from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
 from models.proyectil import Proyectil
 
-class Jugador:
-    def __init__(self, coord_x, coord_y, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 32):
+class Jugador(pg.sprite.Sprite):
+    def __init__(self, coord_x, coord_y, dict_configs_nivel : dict, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 32):
+        super().__init__()
+        
+        self.config_jugador = dict_configs_nivel.get("jugador")
+        self.puntaje = 0
         #animacion
-        self.__iddle_r = sf.get_surface_from_spritesheeet(r"assets\img\player\iddle\iddle.png", 7, 1)
-        self.__iddle_l = sf.get_surface_from_spritesheeet(r"assets\img\player\iddle\iddle.png", 7, 1, flip = True)
-        self.__walk_r = sf.get_surface_from_spritesheeet(r"assets\img\player\walk\walk.png", 8, 1)
-        self.__walk_l = sf.get_surface_from_spritesheeet(r"assets\img\player\walk\walk.png", 8, 1, flip = True)
-        self.__jump_r = sf.get_surface_from_spritesheeet(r"assets\img\player\jump\jump.png", 9, 1)
-        self.__jump_l = sf.get_surface_from_spritesheeet(r"assets\img\player\jump\jump.png", 9, 1, flip = True)
-        self.__run_r = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1)
-        self.__run_l = sf.get_surface_from_spritesheeet(r"assets\img\player\run\run.png", 10, 1, flip = True)
-        self.__shoot_r = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1)
-        self.__shoot_l = sf.get_surface_from_spritesheeet(r"assets\img\player\shoot\shoot.png", 8, 1, flip = True)
+        self.sprites_jugador = self.config_jugador.get("sprites")
+        self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
+        self.__iddle_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1, flip = True)
+        self.__walk_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("walk"), 8, 1)
+        self.__walk_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("walk"), 8, 1, flip = True)
+        self.__jump_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("jump"), 9, 1)
+        self.__jump_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("jump"), 9, 1, flip = True)
+        self.__run_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("run"), 10, 1)
+        self.__run_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("run"), 10, 1, flip = True)
+        self.__shoot_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1)
+        self.__shoot_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1, flip = True)
         self.__player_animation_time = 0
         self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
@@ -147,17 +152,11 @@ class Jugador:
         else:
             rect_direction = self.__rect.left
             direction = "left"
-        return Proyectil(rect_direction, self.__rect.centery, direction, "player", not self.__is_looking_right)
+        return Proyectil(rect_direction, self.__rect.centery, direction, "player", self.config_jugador, not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()
         return current_time - self.projectile_time >= self.projectile_cooldown
-        
-    # def recharge(self):
-    #     if not self.ready:
-    #         curent_time = pg.time.get_ticks()
-    #         if curent_time - self.projectile_time >= self.projectile_cooldown:
-    #             self.ready = True
     
     def do_movement(self, delta_ms): #Relacionado al movimiento
         self.__player_move_time += delta_ms
@@ -179,10 +178,27 @@ class Jugador:
             else:
                 self.__actual_frame_index = 0
     
-    
-    
+    def keyboard_events (self):
+        lista_teclas_presionadas = pg.key.get_pressed()
+        
+        if lista_teclas_presionadas[pg.K_RIGHT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_LEFT]:
+            self.run("Right")
+        if lista_teclas_presionadas[pg.K_LEFT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT]:
+            self.run("Left")
+        if lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
+            self.walk("Right")
+        if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
+            self.walk("Left")
+        if lista_teclas_presionadas[pg.K_UP]:
+            self.jump()
+        if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
+            self.shoot() 
+        if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_SPACE]:
+            self.stay()
+            
     
     def update(self, delta_ms, screen: pg.surface.Surface):
+        self.keyboard_events()
         self.do_movement(delta_ms)
         self.do_animation(delta_ms)
         self.projectile_group.update(screen)

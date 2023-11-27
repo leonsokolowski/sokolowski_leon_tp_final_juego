@@ -18,7 +18,6 @@ class Boss:
         self.__player_animation_time = 0
         self.__gravity = gravity
         self.__jump = jump
-        self.__is_jumping = False
         self.__inital_frame = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
         self.__actual_image_animation = self.__actual_animation[self.__inital_frame] #Representa la imagen actual de la lista de animaciones que estemos recorriendo

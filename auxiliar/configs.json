@@ -1,0 +1,51 @@
+{
+    "nivel_1" : 
+    {
+        "jugador" : 
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/player/iddle/iddle.png",
+                "walk" : "assets/img/player/walk/walk.png",
+                "run" : "assets/img/player/run/run.png",
+                "shoot" : "assets/img/player/shoot/shoot.png",
+                "jump" : "assets/img/player/jump/jump.png"
+            },
+            "proyectil" : "assets/img/player/proyectil/tajo_espada.png"
+
+        },
+        "minion" :
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/minions/iddle/iddle.png",
+                "walk" : "assets/img/minions/walk/walk.png",
+                "run" : "assets/img/minions/run/run.png",
+                "shoot" : "assets/img/minions/shoot/shoot.png"
+            },
+            "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
+            "speed" : 6,
+            "shoot_cooldown" : 2000,
+            "animation_time_cooldown" : 320 
+        },
+        "stats_nivel" : 
+        {
+            "cantidad_enemigos" : 3,
+            "coords_enemigos" : [
+                {
+                    "coord_x": 700,
+                    "coord_y": 525
+                },
+                {
+                    "coord_x": 400,
+                    "coord_y": 525
+                },
+                {
+                    "coord_x": 150,
+                    "coord_y": 525
+                }
+            ]
+        }
+
+    }
+}
