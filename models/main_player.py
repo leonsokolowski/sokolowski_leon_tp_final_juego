@@ -152,7 +152,7 @@ class Jugador(pg.sprite.Sprite):
         else:
             rect_direction = self.__rect.left
             direction = "left"
-        return Proyectil(rect_direction, self.__rect.centery, direction, "player", self.config_jugador, not self.__is_looking_right)
+        return Proyectil(rect_direction, self.__rect.centery, direction, "player", not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()

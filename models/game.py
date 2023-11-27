@@ -9,10 +9,10 @@ class Juego:
     def run_stage(nivel_actual : str):
         pg.init()
         pantalla = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-        reloj = pg.time.Clock()
-        juego = Nivel(pantalla, ALTO_VENTANA, nivel_actual)
         imagen_de_fondo = pg.image.load("assets/img/background/ice_kingdom.jpeg")
         imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTANA))
+        reloj = pg.time.Clock()
+        juego = Nivel(pantalla, ALTO_VENTANA, nivel_actual)
         
         ejecucion = True
         momento_anterior = pg.time.get_ticks() // 1000
@@ -28,13 +28,13 @@ class Juego:
                         ejecucion = False
                         break
         
-        momento_actual =  pg.time.get_ticks() // 1000
-        if momento_actual > momento_anterior:
-            print(momento_actual)
-        
-        pantalla.blit(imagen_de_fondo, imagen_de_fondo.get_rect())
-        delta_ms= reloj.tick(FPS)
-        juego.run(delta_ms)
-        pg.display.update()
+            momento_actual =  pg.time.get_ticks() // 1000
+            if momento_actual > momento_anterior:
+                print(momento_actual)
+            
+            pantalla.blit(imagen_de_fondo, imagen_de_fondo.get_rect())
+            delta_ms= reloj.tick(FPS)
+            juego.run(delta_ms)
+            pg.display.update()
 
     pg.quit()

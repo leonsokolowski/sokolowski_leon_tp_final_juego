@@ -24,9 +24,9 @@ class Minion(pg.sprite.Sprite):
         self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
         self.__current_time_animation = 0
         #movimiento
-        self.__rect = self.__actual_image_animation.get_rect()
-        self.__rect.x = coord_x
-        self.__rect.y = coord_y
+        self.rect = self.__actual_image_animation.get_rect()
+        self.rect.x = coord_x
+        self.rect.y = coord_y
         self.__is_looking_right = True
         self.__speed_walk = self.config_minion.get("speed")
         self.__frame_rate = frame_rate
@@ -41,15 +41,15 @@ class Minion(pg.sprite.Sprite):
         
     def movimiento(self):  # Ajusta al jugador a los limites de la pantalla
         if self.__is_looking_right:
-            if (self.__rect.right + self.__speed_walk ) < self.__limite_x:
+            if (self.rect.right + self.__speed_walk ) < self.__limite_x:
                 self.__actual_animation = self.__walk_r
-                self.__rect.x += self.__speed_walk
+                self.rect.x += self.__speed_walk
             else:
                 self.__is_looking_right = False
         else:
-            if self.__rect.left - self.__speed_walk > 0:
+            if self.rect.left - self.__speed_walk > 0:
                 self.__actual_animation = self.__walk_l
-                self.__rect.x -= self.__speed_walk
+                self.rect.x -= self.__speed_walk
             else:
                 self.__is_looking_right = True
     
@@ -77,12 +77,12 @@ class Minion(pg.sprite.Sprite):
         
     def create_projectile(self):
         if self.__is_looking_right:
-            rect_direction = self.__rect.right
+            rect_direction = self.rect.right
             direction = "right"
         else:
-            rect_direction = self.__rect.left
+            rect_direction = self.rect.left
             direction = "left"   
-        return Proyectil(rect_direction, self.__rect.centery, direction, "minion", self.config_minion, not self.__is_looking_right)
+        return Proyectil(rect_direction, self.rect.centery, direction, "minion", not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()
@@ -96,8 +96,8 @@ class Minion(pg.sprite.Sprite):
             self.shoot()
             if current_time - self.__current_time_animation > self.config_minion.get("animation_time_cooldown"):
                 self.movimiento()
-            if self.__rect.y < 525:
-                self.__rect.y += self.__gravity
+            if self.rect.y < 525:
+                self.rect.y += self.__gravity
 
     
     def do_animation(self, delta_ms):
@@ -120,6 +120,6 @@ class Minion(pg.sprite.Sprite):
     
     def draw(self, screen : pg.surface.Surface):
         if DEBUG:
-            pg.draw.rect(screen, "red", self.__rect)
+            pg.draw.rect(screen, "red", self.rect)
         self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index]
-        screen.blit(self.__actual_image_animation, self.__rect)
+        screen.blit(self.__actual_image_animation, self.rect)
