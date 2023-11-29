@@ -41,13 +41,13 @@ class Minion(pg.sprite.Sprite):
         
     def movimiento(self):  # Ajusta al jugador a los limites de la pantalla
         if self.__is_looking_right:
-            if (self.rect.right + self.__speed_walk ) < self.__limite_x:
+            if (self.rect.right + self.__speed_walk ) <= self.__limite_x:
                 self.__actual_animation = self.__walk_r
                 self.rect.x += self.__speed_walk
             else:
                 self.__is_looking_right = False
         else:
-            if self.rect.left - self.__speed_walk > 0:
+            if self.rect.left - self.__speed_walk >= 0:
                 self.__actual_animation = self.__walk_l
                 self.rect.x -= self.__speed_walk
             else:
@@ -58,7 +58,7 @@ class Minion(pg.sprite.Sprite):
         return self.projectile_group
     
     def shoot(self):  
-        print('!fium!')
+        #print('!fium!')
         if self.cooldown_to_shoot():
             self.__current_time_animation = pg.time.get_ticks()
             self.shoot_animation()
@@ -82,7 +82,7 @@ class Minion(pg.sprite.Sprite):
         else:
             rect_direction = self.rect.left
             direction = "left"   
-        return Proyectil(rect_direction, self.rect.centery, direction, "minion", not self.__is_looking_right)
+        return Proyectil(rect_direction, self.rect.centery, direction, self.config_minion, not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()

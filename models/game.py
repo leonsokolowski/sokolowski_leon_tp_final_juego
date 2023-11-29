@@ -1,5 +1,6 @@
 import pygame as pg
 from models.stage import Nivel
+from models.plataformas import Plataforma
 from auxiliar.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS)
 
 class Juego:
@@ -12,10 +13,15 @@ class Juego:
         imagen_de_fondo = pg.image.load("assets/img/background/ice_kingdom.jpeg")
         imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTANA))
         reloj = pg.time.Clock()
-        juego = Nivel(pantalla, ALTO_VENTANA, nivel_actual)
+        juego = Nivel(pantalla, ANCHO_VENTANA, nivel_actual)
+        
+        # lista_de_plataformas = []
+        # lista_de_plataformas.append(Plataforma(0, 550, 800, 50))
+        # lista_de_plataformas.append(Plataforma(300, 300, 80, 80))
         
         ejecucion = True
         momento_anterior = pg.time.get_ticks() // 1000
+        
         
         while ejecucion:
             lista_eventos = pg.event.get()
@@ -30,10 +36,13 @@ class Juego:
         
             momento_actual =  pg.time.get_ticks() // 1000
             if momento_actual > momento_anterior:
-                print(momento_actual)
+                #print(momento_actual)
+                pass
             
             pantalla.blit(imagen_de_fondo, imagen_de_fondo.get_rect())
             delta_ms= reloj.tick(FPS)
+            # for plataforma in lista_de_plataformas:
+            #     plataforma.update(pantalla)
             juego.run(delta_ms)
             pg.display.update()
 

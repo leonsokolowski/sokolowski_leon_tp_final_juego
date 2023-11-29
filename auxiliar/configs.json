@@ -31,9 +31,10 @@
         "stats_nivel" : 
         {
             "cantidad_enemigos" : 3,
-            "coords_enemigos" : [
+            "coords_enemigos" : 
+            [
                 {
-                    "coord_x": 700,
+                    "coord_x": 50,
                     "coord_y": 525
                 },
                 {
@@ -43,6 +44,18 @@
                 {
                     "coord_x": 150,
                     "coord_y": 525
+                }
+            ],
+            "cantidad_plataformas" : 2,
+            "coords_plataformas":
+            [
+                {
+                    "coord_x": 0,
+                    "coord_y": 200
+                },
+                {
+                    "coord_x": 450,
+                    "coord_y": 20
                 }
             ]
         }

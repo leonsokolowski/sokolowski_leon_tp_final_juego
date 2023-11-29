@@ -9,6 +9,7 @@ class Jugador(pg.sprite.Sprite):
         
         self.config_jugador = dict_configs_nivel.get("jugador")
         self.puntaje = 0
+        self.is_alive = True
         #animacion
         self.sprites_jugador = self.config_jugador.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
@@ -41,6 +42,11 @@ class Jugador(pg.sprite.Sprite):
         self.__rect = self.__actual_image_animation.get_rect()
         self.__rect.x = coord_x
         self.__rect.y = coord_y
+        self.__diferencia_de_rect = 60
+        self.__rect_hitbox = self.__actual_image_animation.get_rect()
+        self.__rect_hitbox.x = coord_x
+        self.__rect_hitbox.y = coord_y + self.__diferencia_de_rect
+        self.__rect_hitbox.height = self.__rect.height - self.__diferencia_de_rect
         self.__is_looking_right = True
         
         #disparo
@@ -152,7 +158,7 @@ class Jugador(pg.sprite.Sprite):
         else:
             rect_direction = self.__rect.left
             direction = "left"
-        return Proyectil(rect_direction, self.__rect.centery, direction, "player", not self.__is_looking_right)
+        return Proyectil(rect_direction, self.__rect.centery, direction, self.config_jugador, not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()
@@ -164,9 +170,12 @@ class Jugador(pg.sprite.Sprite):
             self.__player_move_time	= 0
             self.__rect.x += self.__set_borders_limit_x()
             self.__rect.y += self.__set_borders_limit_y()
+            self.__rect_hitbox.x += self.__set_borders_limit_x()
+            self.__rect_hitbox.y += self.__set_borders_limit_y()
             #Parte relacionada a saltar
-            if self.__rect.y < 450:
+            if self.__rect.y < 440:
                 self.__rect.y += self.__gravity
+                self.__rect_hitbox.y += self.__gravity
 
     
     def do_animation(self, delta_ms):
@@ -176,7 +185,8 @@ class Jugador(pg.sprite.Sprite):
             if self.__actual_frame_index < len(self.__actual_animation) - 1:
                 self.__actual_frame_index += 1
             else:
-                self.__actual_frame_index = 0
+                if self.is_alive:
+                    self.__actual_frame_index = 0
     
     def keyboard_events (self):
         lista_teclas_presionadas = pg.key.get_pressed()
@@ -206,6 +216,6 @@ class Jugador(pg.sprite.Sprite):
     
     def draw(self, screen : pg.surface.Surface):
         if DEBUG:
-            pg.draw.rect(screen, "red", self.__rect)
+            pg.draw.rect(screen, "red", self.__rect_hitbox)
         self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index]
         screen.blit(self.__actual_image_animation, self.__rect)   
