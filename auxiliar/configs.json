@@ -51,11 +51,15 @@
             [
                 {
                     "coord_x": 0,
-                    "coord_y": 200
+                    "coord_y": 550,
+                    "ancho" : 800,
+                    "alto" : 50
                 },
                 {
                     "coord_x": 450,
-                    "coord_y": 20
+                    "coord_y": 20,
+                    "ancho" : 80,
+                    "alto" : 80
                 }
             ]
         }
