@@ -75,7 +75,7 @@ class Nivel:
                         print(self.sprite_jugador.is_on_land)
                         self.sprite_jugador.is_on_land = True
                         self.jugador.sprite.obtener_move_y = 0
-                        self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
+                        #self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
                         self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top
                 for minion in self.minions:
                     if plataforma.rect.colliderect(minion.rect):
