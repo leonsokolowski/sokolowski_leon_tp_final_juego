@@ -54,35 +54,43 @@ class Nivel:
         self.check_collides()
     
     def check_collides(self):   
-        for projectile in self.sprite_jugador.get_projectiles:
-            cantidad_antes = len(self.minions)
-            if pg.sprite.spritecollide(projectile, self.minions, True):
-                projectile.kill()
-                cantidad_despues = len(self.minions)
-                if cantidad_antes > cantidad_despues:
-                    cantidad_vencido = cantidad_antes - cantidad_despues
-                    self.sprite_jugador.puntaje += cantidad_vencido * 100
-                    print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
-                if len(self.minions) == 0 and not self.victoria:
-                    self.victoria = True
-                    print(f'Ganaste la partida con: {self.sprite_jugador.puntaje} Puntos!')
-        
-        for plataforma in self.plataformas:
-                if self.jugador.sprite.obtener_move_y > 0:
-                    #if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
-                    print('hola')
-                    if plataforma.rect.colliderect(self.sprite_jugador.rect_hitbox):
-                        print(self.sprite_jugador.is_on_land)
-                        self.sprite_jugador.is_on_land = True
-                        self.jugador.sprite.obtener_move_y = 0
-                        #self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
-                        self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top
-                for minion in self.minions:
-                    if plataforma.rect.colliderect(minion.rect):
-                        minion.is_on_land = True
-                        minion.rect.bottom = plataforma.rect.top
-                        minion.rect_feet_collition.bottom = plataforma.rect.top
-                    
+        if self.sprite_jugador.is_alive:
+            for projectile in self.sprite_jugador.get_projectiles:
+                cantidad_antes = len(self.minions)
+                if pg.sprite.spritecollide(projectile, self.minions, True):
+                    projectile.kill()
+                    cantidad_despues = len(self.minions)
+                    if cantidad_antes > cantidad_despues:
+                        cantidad_vencido = cantidad_antes - cantidad_despues
+                        self.sprite_jugador.puntaje += cantidad_vencido * 100
+                        print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
+                    if len(self.minions) == 0 and not self.victoria:
+                        self.victoria = True
+                        print(f'Ganaste la partida con: {self.sprite_jugador.puntaje} Puntos!')
+                                
+            for plataforma in self.plataformas:
+                    if self.jugador.sprite.obtener_move_y > 0:
+                        #if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
+                        #print('hola')
+                        if plataforma.rect.colliderect(self.sprite_jugador.rect_hitbox):
+                            self.sprite_jugador.is_on_land = True
+                            print(self.sprite_jugador.is_on_land)
+                            self.jugador.sprite.obtener_move_y = 0
+                            #self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
+                            self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top
+                    for minion in self.minions:
+                        if plataforma.rect.colliderect(minion.rect):
+                            minion.is_on_land = True
+                            minion.rect.bottom = plataforma.rect.top
+                            minion.rect_feet_collition.bottom = plataforma.rect.top
+                        for projectile in minion.get_projectiles:
+                            if pg.sprite.spritecollide(projectile, self.jugador, False):
+                                self.sprite_jugador.vidas -= 1
+                                print(self.sprite_jugador.vidas)
+                                print(self.sprite_jugador.is_alive)
+                                projectile.kill()
+        else:
+            self.sprite_jugador.kill()                
         
     
         

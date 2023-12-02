@@ -33,6 +33,12 @@ class Juego:
                         print("Estoy CERRANDO el juego")
                         ejecucion = False
                         break
+                    # case pg.KEYDOWN:
+                    #     if event.key == pg.K_UP:
+                    #         juego.sprite_jugador.jump()
+            
+        
+                        
         
             momento_actual =  pg.time.get_ticks() // 1000
             if momento_actual > momento_anterior:

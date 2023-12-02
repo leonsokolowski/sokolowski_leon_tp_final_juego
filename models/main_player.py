@@ -9,7 +9,8 @@ class Jugador(pg.sprite.Sprite):
         
         self.config_jugador = dict_configs_nivel.get("jugador")
         self.puntaje = 0
-        self.is_alive = True
+        self.vidas = 5
+        self.is_alive = self.check_is_alive()
         #animacion
         self.sprites_jugador = self.config_jugador.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
@@ -78,6 +79,12 @@ class Jugador(pg.sprite.Sprite):
     def obtener_move_y(self,move_y):
         self.__move_y = move_y
     
+    def check_is_alive (self):
+        if self.vidas <= 0:
+            self.kill()
+            return False
+        else:
+            return True
     
     def __set_x_animations_preset(self, move_x, animation_list : list[pg.surface.Surface], look_r : bool):
         self.__move_x = move_x
@@ -94,15 +101,16 @@ class Jugador(pg.sprite.Sprite):
         self.is_jumping = True
     
     def jump(self): 
-        pixel_inicial_salto = self.rect.top
+        pixel_inicial_salto = self.rect_hitbox.top
         if not self.is_jumping:
             if (self.is_on_land == True or pixel_inicial_salto < 100) and not self.is_landing: 
                 self.__set_y_animations_preset()
                 self.is_on_land = False
-            elif pixel_inicial_salto > 100 or (self.is_jumping == False and self.is_on_land == False):
+            elif pixel_inicial_salto >= 100 or (self.is_jumping == False and self.is_on_land == False):
                 self.is_landing = True    
             else:
                 self.is_jumping = False
+                self.is_landing = False
                 self.is_on_land = True
                 self.stay()
         
@@ -218,19 +226,10 @@ class Jugador(pg.sprite.Sprite):
             else:
                 if self.is_alive:
                     self.__actual_frame_index = 0
-    
-    # def is_on_platform(self, grupo_plataformas):
-    #     valor = False
-    #     if self.__rect.y < 440:
-    #         valor = True   
-    #     else:
-    #         for plataforma in grupo_plataformas:
-    #             if self.rect_feet_collition.colliderect(plataforma.rect_top_platform):
-    #                 valor =  True 
-    #     return valor
 
     
     def keyboard_events (self):
+            
         lista_teclas_presionadas = pg.key.get_pressed()
         
         if lista_teclas_presionadas[pg.K_RIGHT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_LEFT]:
