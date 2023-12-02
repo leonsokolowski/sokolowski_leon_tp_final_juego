@@ -77,9 +77,12 @@ class Nivel:
                         self.jugador.sprite.obtener_move_y = 0
                         self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
                         self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top
-                        #self.sprite_jugador.rect.bottom = plataforma.rect.top
-                #if self.sprite_jugador.rect_feet_collition.colliderect(plataforma.rect):
-                    #self.sprite_jugador.is_on_land =  True 
+                for minion in self.minions:
+                    if plataforma.rect.colliderect(minion.rect):
+                        minion.is_on_land = True
+                        minion.rect.bottom = plataforma.rect.top
+                        minion.rect_feet_collition.bottom = plataforma.rect.top
+                    
         
     
         

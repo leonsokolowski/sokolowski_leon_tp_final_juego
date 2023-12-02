@@ -33,6 +33,10 @@ class Minion(pg.sprite.Sprite):
         self.__minion_move_time = 0
         self.__gravity = gravity
         self.__limite_x = limite_x
+        self.rect_feet_collition = pg.Rect(self.rect.x + self.rect.w/4, self.rect.y + self.rect.h - 5, self.rect.w/2, 5)
+        self.is_jumping = False
+        self.is_landing = False
+        self.is_on_land = False
         
         #disparo
         self.projectile_time = 0
@@ -96,8 +100,16 @@ class Minion(pg.sprite.Sprite):
             self.shoot()
             if current_time - self.__current_time_animation > self.config_minion.get("animation_time_cooldown"):
                 self.movimiento()
-            if self.rect.y < 525:
+            # if self.rect.y < 525:
+            #     self.rect.y += self.__gravity
+            if not self.is_on_land:
                 self.rect.y += self.__gravity
+                #self.rect_hitbox.y += self.__gravity
+                #self.rect_feet_collition.y += self.__gravity
+                #self.is_on_land = True
+                self.is_landing = True
+            else:
+                self.__move_y = 0
 
     
     def do_animation(self, delta_ms):
