@@ -18,7 +18,7 @@ class Minion(pg.sprite.Sprite):
         self.__run_l = sf.get_surface_from_spritesheeet(self.sprites_minion.get("run"), 6, 1, flip = True)
         self.__shoot_r = sf.get_surface_from_spritesheeet(self.sprites_minion.get("shoot"), 4, 1)
         self.__shoot_l = sf.get_surface_from_spritesheeet(self.sprites_minion.get("shoot"), 4, 1, flip = True)
-        self.__player_animation_time = 0
+        self.__minion_animation_time = 0
         self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
         self.__actual_image_animation = self.__actual_animation[self.__actual_frame_index] #Representa la imagen actual de la lista de animaciones que estemos recorriendo
@@ -62,7 +62,6 @@ class Minion(pg.sprite.Sprite):
         return self.projectile_group
     
     def shoot(self):  
-        #print('!fium!')
         if self.cooldown_to_shoot():
             self.__current_time_animation = pg.time.get_ticks()
             self.shoot_animation()
@@ -113,9 +112,9 @@ class Minion(pg.sprite.Sprite):
 
     
     def do_animation(self, delta_ms):
-        self.__player_animation_time += delta_ms
-        if self.__player_animation_time >= self.__frame_rate:
-            self.__player_animation_time = 0
+        self.__minion_animation_time += delta_ms
+        if self.__minion_animation_time >= self.__frame_rate:
+            self.__minion_animation_time = 0
             if self.__actual_frame_index < len(self.__actual_animation) - 1:
                 self.__actual_frame_index += 1
             else:

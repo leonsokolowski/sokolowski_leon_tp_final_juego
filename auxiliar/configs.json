@@ -28,6 +28,13 @@
             "shoot_cooldown" : 2000,
             "animation_time_cooldown" : 320 
         },
+        "fruta":
+        {
+            "sprites" :
+            {
+                "main" : "assets/img/frutas/iddle/apple_iddle.png"
+            }
+        },
         "stats_nivel" : 
         {
             "cantidad_enemigos" : 3,
@@ -51,9 +58,9 @@
             [
                 {
                     "coord_x": 0,
-                    "coord_y": 550,
+                    "coord_y": 580,
                     "ancho" : 800,
-                    "alto" : 50
+                    "alto" : 20
                 },
                 {
                     "coord_x": 450,
@@ -61,6 +68,19 @@
                     "ancho" : 80,
                     "alto" : 80
                 }
+            ],
+            "cantidad_frutas" : 2,
+            "coords_frutas" : 
+            [
+                {
+                    "coord_x" : 300,
+                    "coord_y" : 500
+                },
+                {
+                    "coord_x" : 550,
+                    "coord_y" : 500
+                }
+
             ]
         }
 

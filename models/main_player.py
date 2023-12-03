@@ -169,7 +169,6 @@ class Jugador(pg.sprite.Sprite):
         return self.projectile_group
     
     def shoot(self):  
-        print('!shink!')
         if self.cooldown_to_shoot():
             self.shoot_animation()
             self.projectile_group.add(self.create_projectile())
