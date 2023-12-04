@@ -53,20 +53,26 @@
                     "coord_y": 525
                 }
             ],
-            "cantidad_plataformas" : 2,
+            "cantidad_plataformas" : 3,
             "coords_plataformas":
             [
                 {
-                    "coord_x": 0,
-                    "coord_y": 580,
-                    "ancho" : 800,
-                    "alto" : 20
+                    "coord_x": -10,
+                    "coord_y": 570,
+                    "ancho" : 850,
+                    "alto" : 100
                 },
                 {
                     "coord_x": 450,
-                    "coord_y": 20,
-                    "ancho" : 80,
-                    "alto" : 80
+                    "coord_y": 100,
+                    "ancho" : 200,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 15,
+                    "coord_y": 350,
+                    "ancho" : 300,
+                    "alto" : 100
                 }
             ],
             "cantidad_frutas" : 2,
@@ -74,11 +80,11 @@
             [
                 {
                     "coord_x" : 300,
-                    "coord_y" : 500
+                    "coord_y" : 530
                 },
                 {
                     "coord_x" : 550,
-                    "coord_y" : 500
+                    "coord_y" : 530
                 }
 
             ]

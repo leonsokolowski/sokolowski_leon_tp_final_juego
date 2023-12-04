@@ -10,7 +10,7 @@ class Juego:
     def run_stage(nivel_actual : str):
         pg.init()
         pantalla = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-        imagen_de_fondo = pg.image.load("assets/img/background/ice_kingdom.jpeg")
+        imagen_de_fondo = pg.image.load("assets/img/background/background.png")
         imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTANA))
         reloj = pg.time.Clock()
         juego = Nivel(pantalla, ANCHO_VENTANA, nivel_actual)

@@ -86,18 +86,21 @@ class Nivel:
                 if self.jugador.sprite.obtener_move_y > 0:
                     #if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                     #print('hola')
-                    if plataforma.rect.colliderect(self.sprite_jugador.rect_hitbox):
+                    if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                         self.sprite_jugador.is_on_land = True
                         print(self.sprite_jugador.is_on_land)
                         self.jugador.sprite.obtener_move_y = 0
-                        self.sprite_jugador.rect.bottom = plataforma.rect.top
-                        self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top
-                        self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top
+                        self.sprite_jugador.rect.bottom = plataforma.rect.top + 25
+                        self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top + 25
+                        self.sprite_jugador.rect_feet_collition.bottom = plataforma.rect.top + 25
+                else:
+                    self.sprite_jugador.is_on_land = False
+                    print(self.sprite_jugador.is_on_land)
                 for minion in self.minions:
                     if plataforma.rect.colliderect(minion.rect):
                         minion.is_on_land = True
-                        minion.rect.bottom = plataforma.rect.top
-                        minion.rect_feet_collition.bottom = plataforma.rect.top
+                        minion.rect.bottom = plataforma.rect.top + 25
+                        minion.rect_feet_collition.bottom = plataforma.rect.top + 25
                     for projectile in minion.get_projectiles:
                         if pg.sprite.spritecollide(projectile, self.jugador, False):
                             self.sprite_jugador.vidas -= 1
