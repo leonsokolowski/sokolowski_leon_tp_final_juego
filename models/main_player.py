@@ -93,26 +93,28 @@ class Jugador(pg.sprite.Sprite):
             self.__actual_frame_index = 0
             self.__actual_animation = animation_list
     
-    def __set_y_animations_preset(self):
-        self.__move_y = -self.__jump
-        self.__move_x = self.__speed_run if self.__is_looking_right else -self.__speed_run
-        self.__actual_animation = self.__jump_r if self.__is_looking_right else self.__jump_l
+    def jump_animation(self):
         self.__actual_frame_index = 0
-        self.is_jumping = True
+        if self.is_jumping:
+            self.__actual_animation = self.__jump_r if self.__is_looking_right else self.__jump_l
+        elif self.is_landing:
+            self.__actual_animation = self.__walk_r if self.__is_looking_right else self.__walk_l
+        else:
+            self.__actual_animation = self.__iddle_r if self.__is_looking_right else self.__iddle_l
     
     def jump(self): 
         pixel_inicial_salto = self.rect_hitbox.top
-        if not self.is_jumping:
-            if (self.is_on_land == True or pixel_inicial_salto < 100) and not self.is_landing: 
-                self.__set_y_animations_preset()
-                self.is_on_land = False
-            elif pixel_inicial_salto >= 100 or (self.is_jumping == False and self.is_on_land == False):
-                self.is_landing = True    
-            else:
-                self.is_jumping = False
-                self.is_landing = False
-                self.is_on_land = True
-                self.stay()
+        if (self.is_on_land == True and pixel_inicial_salto - self.__jump != 1000) and not self.is_landing and not self.is_jumping: 
+            self.__move_y -= self.__jump
+            self.is_jumping = True
+            self.is_on_land = False
+        elif pixel_inicial_salto - self.__jump >= 1000 or (self.is_jumping == False and self.is_on_land == False):
+            self.is_landing = True    
+        else:
+            self.is_jumping = False
+            self.is_landing = False
+            self.is_on_land = True
+            self.stay()
         
     def walk(self, direction : str = "Right"):
         match(direction):
@@ -158,7 +160,7 @@ class Jugador(pg.sprite.Sprite):
             pixels_move = self.__move_y if self.rect.bottom < ALTO_VENTANA else 0 #- self.__actual_image_animation.get_height()
             pixels_move = self.__move_y if self.rect_hitbox.bottom < ALTO_VENTANA else 0 #- self.__actual_image_animation.get_height()
             pixels_move = self.__move_y if self.rect_feet_collition.bottom < ALTO_VENTANA else 0 #- self.__actual_image_animation.get_height()
-            print(pixels_move)
+            #print(pixels_move)
         elif self.__move_y < 0:
             pixels_move = self.__move_y if self.rect.top > 0 else 0
             pixels_move = self.__move_y if self.rect_hitbox.top > 0 else 0
@@ -239,8 +241,8 @@ class Jugador(pg.sprite.Sprite):
             self.walk("Right")
         if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
             self.walk("Left")
-        elif lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
-            self.jump()
+        # if lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
+        #     self.jump()
         if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
             self.shoot() 
         if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_SPACE]:

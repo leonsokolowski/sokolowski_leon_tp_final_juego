@@ -41,8 +41,8 @@
             "coords_enemigos" : 
             [
                 {
-                    "coord_x": 50,
-                    "coord_y": 525
+                    "coord_x": 20,
+                    "coord_y": 300
                 },
                 {
                     "coord_x": 400,
@@ -57,10 +57,10 @@
             "coords_plataformas":
             [
                 {
-                    "coord_x": -10,
+                    "coord_x": -20,
                     "coord_y": 570,
                     "ancho" : 850,
-                    "alto" : 100
+                    "alto" : 150
                 },
                 {
                     "coord_x": 450,
