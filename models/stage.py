@@ -88,7 +88,7 @@ class Nivel:
                     #print('hola')
                     if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                         self.sprite_jugador.is_on_land = True
-                        print(self.sprite_jugador.is_on_land)
+                        #print(self.sprite_jugador.is_on_land)
                         self.jugador.sprite.obtener_move_y = 0
                         self.sprite_jugador.rect.bottom = plataforma.rect.top + 25
                         self.sprite_jugador.rect_hitbox.bottom = plataforma.rect.top + 25
@@ -96,7 +96,7 @@ class Nivel:
                     else:
                         self.sprite_jugador.is_on_land = False
                         self.sprite_jugador.is_landing = True
-                        print(self.sprite_jugador.is_on_land)
+                        #print(self.sprite_jugador.is_on_land)
                 for minion in self.minions:
                     if minion.move_y == 0:
                         if plataforma.rect.colliderect(minion.rect_feet_collition):
@@ -109,8 +109,8 @@ class Nivel:
                     for projectile in minion.get_projectiles:
                         if pg.sprite.spritecollide(projectile, self.jugador, False):
                             self.sprite_jugador.vidas -= 1
-                            #print(self.sprite_jugador.vidas)
-                            #print(self.sprite_jugador.is_alive)
+                            print(self.sprite_jugador.vidas)
+                            print(self.sprite_jugador.is_alive)
                             projectile.kill()
         
         cantidad_frutas_antes = len(self.frutas)       
