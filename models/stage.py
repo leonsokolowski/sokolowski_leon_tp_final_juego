@@ -3,7 +3,7 @@ from models.main_player import Jugador
 from models.minion import Minion
 from models.plataformas import Plataforma
 from models.fruits import Fruta
-from auxiliar.constantes import open_configs
+from auxiliar.constantes import open_configs, ANCHO_VENTANA, ALTO_VENTANA
 
 class Nivel:
     def __init__(self, pantalla : pg.surface.Surface, limite_x, nivel_actual : str) -> None:
@@ -51,10 +51,10 @@ class Nivel:
     def spawnear_plataformas(self):
         if self.maxima_cantidad_plataformas > len(self.cordenadas_plataformas):
             for coordenada in self.cordenadas_plataformas:
-                self.plataformas.add(Plataforma(coordenada.get("coord_x"), coordenada.get("coord_y"), coordenada.get("ancho"), coordenada.get("alto")))
+                self.plataformas.add(Plataforma(coordenada.get("coord_x"), coordenada.get("coord_y"), coordenada.get("ancho"), coordenada.get("alto"), self.config_nivel))
         elif self.maxima_cantidad_plataformas <= len(self.cordenadas_plataformas):
             for coordenada in range(self.maxima_cantidad_plataformas):
-                self.plataformas.add(Plataforma(self.cordenadas_plataformas[coordenada].get("coord_x"),self.cordenadas_plataformas[coordenada].get("coord_y"), self.cordenadas_plataformas[coordenada].get("ancho"), self.cordenadas_plataformas[coordenada].get("alto")))
+                self.plataformas.add(Plataforma(self.cordenadas_plataformas[coordenada].get("coord_x"),self.cordenadas_plataformas[coordenada].get("coord_y"), self.cordenadas_plataformas[coordenada].get("ancho"), self.cordenadas_plataformas[coordenada].get("alto"), self.config_nivel))
     
     def spawnear_frutas(self):
         if self.maxima_cantidad_frutas > len(self.cordenadas_frutas):
@@ -83,10 +83,10 @@ class Nivel:
                     print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
                    
         for plataforma in self.plataformas:
-                if self.jugador.sprite.obtener_move_y > 0:
+                if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                     #if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                     #print('hola')
-                    if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
+                    if self.jugador.sprite.obtener_move_y > 0:
                         self.sprite_jugador.is_on_land = True
                         #print(self.sprite_jugador.is_on_land)
                         self.jugador.sprite.obtener_move_y = 0

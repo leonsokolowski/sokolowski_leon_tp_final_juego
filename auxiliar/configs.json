@@ -1,6 +1,13 @@
 {
     "nivel_1" : 
     {
+        "background" : 
+        {
+            "sprites" : 
+            {
+                "background" : "assets/img/background/background.png"
+            }    
+        },
         "jugador" : 
         {
             "sprites" : 
@@ -27,6 +34,13 @@
             "speed" : 6,
             "shoot_cooldown" : 2000,
             "animation_time_cooldown" : 320 
+        },
+        "plataforma" :
+        {
+            "sprites" : 
+            {
+                "image" : "assets/img/plataforma/plataforma_1.png"  
+            } 
         },
         "fruta":
         {

@@ -2,10 +2,12 @@ import pygame as pg
 from auxiliar.constantes import (DEBUG)
 
 class Plataforma(pg.sprite.Sprite):
-    def __init__(self, coord_x, coord_y, ancho, alto):
+    def __init__(self, coord_x, coord_y, ancho, alto, dict_configs_nivel : dict):
         super().__init__()
         
-        self.imagen_plataforma = pg.image.load(r"assets\img\plataforma\plataforma_1.png")
+        self.config_plataforma = dict_configs_nivel.get("plataforma")
+        self.sprite_plataforma = self.config_plataforma.get("sprites")
+        self.imagen_plataforma = pg.image.load(self.sprite_plataforma.get("image"))
         self.imagen_plataforma = pg.transform.scale(self.imagen_plataforma, (ancho, alto))
         self.rect = self.imagen_plataforma.get_rect()
         self.rect.x = coord_x

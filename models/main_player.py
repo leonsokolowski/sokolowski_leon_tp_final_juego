@@ -4,7 +4,7 @@ from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
 from models.proyectil import Proyectil
 
 class Jugador(pg.sprite.Sprite):
-    def __init__(self, coord_x, coord_y, dict_configs_nivel : dict, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 32):
+    def __init__(self, coord_x, coord_y, dict_configs_nivel : dict, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 50):
         super().__init__()
         
         self.config_jugador = dict_configs_nivel.get("jugador")
@@ -241,7 +241,7 @@ class Jugador(pg.sprite.Sprite):
             self.walk("Right")
         if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
             self.walk("Left")
-        # if lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
+        # elif lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
         #     self.jump()
         if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
             self.shoot() 
