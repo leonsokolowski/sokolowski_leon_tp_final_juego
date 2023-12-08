@@ -10,7 +10,7 @@ class Jugador(pg.sprite.Sprite):
         self.config_jugador = dict_configs_nivel.get("jugador")
         self.puntaje = 0
         self.vidas = 5
-        self.is_alive = self.check_is_alive()
+        self.is_alive = True
         #animacion
         self.sprites_jugador = self.config_jugador.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
@@ -23,6 +23,7 @@ class Jugador(pg.sprite.Sprite):
         self.__run_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("run"), 10, 1, flip = True)
         self.__shoot_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1)
         self.__shoot_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1, flip = True)
+        self.__die = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("die"), 11, 1)
         self.__player_animation_time = 0
         self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
@@ -79,12 +80,17 @@ class Jugador(pg.sprite.Sprite):
     def obtener_move_y(self,move_y):
         self.__move_y = move_y
     
-    def check_is_alive (self):
+    def recibir_disparo_y_comprobar_vidas (self):
+        self.vidas -= 1
         if self.vidas <= 0:
-            self.kill()
-            return False
-        else:
-            return True
+            self.is_alive = False
+            # self.__actual_frame_index = 0
+            if self.__actual_animation != self.__die and self.__actual_animation != self.__die:
+                self.__actual_animation = self.__die
+            
+    def morir (self):
+        #Aca hacemos cosas que necesitamos que pasen antes de morir.
+        self.kill()
     
     def __set_x_animations_preset(self, move_x, animation_list : list[pg.surface.Surface], look_r : bool):
         self.__move_x = move_x
@@ -227,6 +233,8 @@ class Jugador(pg.sprite.Sprite):
             else:
                 if self.is_alive:
                     self.__actual_frame_index = 0
+                else:
+                    self.morir()
 
     
     def keyboard_events (self):

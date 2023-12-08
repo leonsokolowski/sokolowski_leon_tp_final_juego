@@ -1,6 +1,6 @@
 import pygame as pg
-from models.stage import Nivel
-from models.plataformas import Plataforma
+from models.nivel import Nivel
+from models.plataforma import Plataforma
 from auxiliar.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS, get_font, open_configs)
 
 class Juego:
@@ -20,9 +20,9 @@ class Juego:
         juego = Nivel(pantalla, ANCHO_VENTANA, nivel_actual)
         
         ejecucion = True
+        
+        
         momento_anterior = pg.time.get_ticks() // 1000
-        
-        
         while ejecucion:
             lista_eventos = pg.event.get()
             
@@ -43,8 +43,11 @@ class Juego:
                         
         
             momento_actual =  pg.time.get_ticks() // 1000
+            #print("hola", momento_anterior)
+            #print("chau", momento_actual)
             if momento_actual > momento_anterior:
                 print(momento_actual)
+                momento_anterior = momento_actual
             momento_actual = str(momento_actual)
             
             

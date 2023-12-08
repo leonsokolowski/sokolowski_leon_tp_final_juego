@@ -1,9 +1,10 @@
 import pygame as pg
-from models.main_player import Jugador
+from models.jugador import Jugador
 from models.minion import Minion
-from models.plataformas import Plataforma
-from models.fruits import Fruta
-from auxiliar.constantes import open_configs, ANCHO_VENTANA, ALTO_VENTANA
+from models.plataforma import Plataforma
+from models.fruta import Fruta
+from models.trampa import Trampa
+from auxiliar.constantes import open_configs
 
 class Nivel:
     def __init__(self, pantalla : pg.surface.Surface, limite_x, nivel_actual : str) -> None:
@@ -16,6 +17,12 @@ class Nivel:
         self.maxima_cantidad_plataformas = self.config_nivel_actual.get("cantidad_plataformas") 
         self.cordenadas_plataformas = self.config_nivel_actual.get("coords_plataformas")    
         self.spawnear_plataformas()
+        
+        #Atributos de las trampas
+        self.trampas = pg.sprite.Group()
+        self.maxima_cantidad_trampas = self.config_nivel_actual.get("cantidad_trampas")
+        self.cordenadas_trampas = self.config_nivel_actual.get("coords_trampas")
+        self.spawnear_trampas()
 
         #Atributos del Jugador
         self.sprite_jugador = Jugador(0, 300, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20, )
@@ -56,6 +63,14 @@ class Nivel:
             for coordenada in range(self.maxima_cantidad_plataformas):
                 self.plataformas.add(Plataforma(self.cordenadas_plataformas[coordenada].get("coord_x"),self.cordenadas_plataformas[coordenada].get("coord_y"), self.cordenadas_plataformas[coordenada].get("ancho"), self.cordenadas_plataformas[coordenada].get("alto"), self.config_nivel))
     
+    def spawnear_trampas(self):
+        if self.maxima_cantidad_trampas > len(self.cordenadas_trampas):
+            for coordenada in self.cordenadas_trampas:
+                self.trampas.add(Trampa(coordenada.get("coord_x"), coordenada.get("coord_y"), coordenada.get("ancho"), coordenada.get("alto"), self.config_nivel))
+        elif self.maxima_cantidad_trampas <= len(self.cordenadas_trampas):
+            for coordenada in range(self.maxima_cantidad_trampas):
+                self.trampas.add(Trampa(self.cordenadas_trampas[coordenada].get("coord_x"),self.cordenadas_plataformas[coordenada].get("coord_y"), self.cordenadas_plataformas[coordenada].get("ancho"), self.cordenadas_plataformas[coordenada].get("alto"), self.config_nivel))
+                
     def spawnear_frutas(self):
         if self.maxima_cantidad_frutas > len(self.cordenadas_frutas):
             for coordenada in self.cordenadas_frutas:
@@ -72,17 +87,19 @@ class Nivel:
         self.check_collides()
     
     def check_collides(self):   
-        for projectile in self.sprite_jugador.get_projectiles:
-            cantidad_minions_antes = len(self.minions)
-            if pg.sprite.spritecollide(projectile, self.minions, True):
-                projectile.kill()
-                cantidad_minions_despues = len(self.minions)
-                if cantidad_minions_antes > cantidad_minions_despues:
-                    cantidad_vencido = cantidad_minions_antes - cantidad_minions_despues
-                    self.sprite_jugador.puntaje += cantidad_vencido * 100
-                    print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
-                   
-        for plataforma in self.plataformas:
+        if self.sprite_jugador.is_alive:
+            for projectile in self.sprite_jugador.get_projectiles:
+                cantidad_minions_antes = len(self.minions)
+                if pg.sprite.spritecollide(projectile, self.minions, True):
+                    projectile.kill()
+                    cantidad_minions_despues = len(self.minions)
+                    if cantidad_minions_antes > cantidad_minions_despues:
+                        cantidad_vencido = cantidad_minions_antes - cantidad_minions_despues
+                        self.sprite_jugador.puntaje += cantidad_vencido * 100
+                        print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
+                    
+            
+            for plataforma in self.plataformas:
                 if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                     #if plataforma.rect.colliderect(self.sprite_jugador.rect_feet_collition):
                     #print('hola')
@@ -98,33 +115,33 @@ class Nivel:
                         self.sprite_jugador.is_landing = True
                         #print(self.sprite_jugador.is_on_land)
                 for minion in self.minions:
-                    if minion.move_y == 0:
-                        if plataforma.rect.colliderect(minion.rect_feet_collition):
-                            minion.is_on_land = True
-                            minion.rect.bottom = plataforma.rect.top + 25
-                            minion.rect_feet_collition.bottom = plataforma.rect.top + 25
+                    if plataforma.rect.colliderect(minion.rect):
+                        # if minion.move_y == 0:
+                        minion.is_on_land = True
+                        minion.rect.bottom = plataforma.rect.top + 25
+                        #print(minion.is_on_land)
                     else:
                         minion.is_on_land = False
                         minion.is_landing = True
+                        #print(minion.is_on_land)
                     for projectile in minion.get_projectiles:
                         if pg.sprite.spritecollide(projectile, self.jugador, False):
-                            self.sprite_jugador.vidas -= 1
+                            self.sprite_jugador.recibir_disparo_y_comprobar_vidas()
                             print(self.sprite_jugador.vidas)
                             print(self.sprite_jugador.is_alive)
                             projectile.kill()
-        
-        cantidad_frutas_antes = len(self.frutas)       
-        if pg.sprite.spritecollide(self.sprite_jugador, self.frutas, True):
-            cantidad_frutas_despues = len(self.frutas)
-            print("Fruta conseguida")
-            if cantidad_frutas_antes > cantidad_frutas_despues:
-                cantidad_frutas_recogidas = cantidad_frutas_antes - cantidad_frutas_despues
-                self.sprite_jugador.puntaje += cantidad_frutas_recogidas * 100
-                print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
-            
-        if len(self.minions) == 0 and len(self.frutas) == 0 and not self.victoria:
-            self.victoria = True
-            print(f'Ganaste la partida con: {self.sprite_jugador.puntaje} Puntos!')        
+            cantidad_frutas_antes = len(self.frutas)       
+            if pg.sprite.spritecollide(self.sprite_jugador, self.frutas, True):
+                cantidad_frutas_despues = len(self.frutas)
+                print("Fruta conseguida")
+                if cantidad_frutas_antes > cantidad_frutas_despues:
+                    cantidad_frutas_recogidas = cantidad_frutas_antes - cantidad_frutas_despues
+                    self.sprite_jugador.puntaje += cantidad_frutas_recogidas * 100
+                    print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
+                
+            if len(self.minions) == 0 and len(self.frutas) == 0 and not self.victoria:
+                self.victoria = True
+                print(f'Ganaste la partida con: {self.sprite_jugador.puntaje} Puntos!')        
         
     
         

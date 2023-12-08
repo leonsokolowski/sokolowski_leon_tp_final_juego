@@ -47,7 +47,7 @@ class Minion(pg.sprite.Sprite):
 
         
     def movimiento(self):  # Ajusta al minion a los limites de la pantalla
-        if self.__is_looking_right and self.is_on_land:
+        if self.__is_looking_right:
             if (self.rect.right + self.__speed_walk ) <= self.__limite_x:
                 self.__actual_animation = self.__walk_r
                 self.rect.x += self.__speed_walk
@@ -60,16 +60,16 @@ class Minion(pg.sprite.Sprite):
             else:
                 self.__is_looking_right = True
         
-        self.rect.y += self.__set_borders_limit_y()
 
     
     def __set_borders_limit_y(self): #Relacionado al movimiento
         pixels_move = 0
         if self.move_y > 0:
             pixels_move = self.move_y if self.rect.bottom < ALTO_VENTANA else 0 #- self.__actual_image_animation.get_height()
-            #print(pixels_move)
+            print(pixels_move)
         elif self.move_y < 0:
             pixels_move = self.move_y if self.rect.top > 0 else 0
+            print(pixels_move)
         return pixels_move
     
     @property
