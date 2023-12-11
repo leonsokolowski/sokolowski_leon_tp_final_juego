@@ -8,6 +8,18 @@
                 "background" : "assets/img/background/background.png"
             }    
         },
+        "gui" :
+        {
+            "images" :
+            {
+                "tablon_madera" : "assets/gui/wooden_plank.png"
+            }
+        },
+        "fuentes" : 
+        { 
+            "palabras" : "assets/font/words_font.ttf",
+            "numeros" : "assets/font/numbers_font.ttf"
+        },
         "jugador" : 
         {
             "sprites" : 
@@ -17,9 +29,10 @@
                 "run" : "assets/img/player/run/run.png",
                 "shoot" : "assets/img/player/shoot/shoot.png",
                 "jump" : "assets/img/player/jump/jump.png",
-                "die" : "assets/img/player/die/die_2.png"
+                "die" : "assets/img/player/die/die_5.png"
             },
-            "proyectil" : "assets/img/player/proyectil/tajo_espada.png"
+            "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
+            "velocidad_proyectil" : 20
 
         },
         "minion" :
@@ -32,6 +45,7 @@
                 "shoot" : "assets/img/minions/shoot/shoot.png"
             },
             "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
+            "velocidad_proyectil" : 15,
             "speed" : 6,
             "shoot_cooldown" : 2000,
             "animation_time_cooldown" : 320 
@@ -47,7 +61,7 @@
         {
             "sprites" : 
             {
-                "image" : "assets/img/trampa/---.png"
+                "image" : "assets/img/trampa/trampa_2.png"
             }
         },
         "fruta":
@@ -67,66 +81,433 @@
                     "coord_y": 300
                 },
                 {
-                    "coord_x": 400,
-                    "coord_y": 525
+                    "coord_x": 1160,
+                    "coord_y": 300
                 },
                 {
-                    "coord_x": 150,
-                    "coord_y": 525
+                    "coord_x": 500,
+                    "coord_y": 460
                 }
             ],
-            "cantidad_frutas" : 2,
+            "cantidad_frutas" : 5,
             "coords_frutas" : 
             [
                 {
-                    "coord_x" : 300,
-                    "coord_y" : 530
+                    "coord_x" : 50,
+                    "coord_y" : 225
                 },
                 {
-                    "coord_x" : 550,
-                    "coord_y" : 530
+                    "coord_x" : 1160,
+                    "coord_y" : 225
+                },
+                {
+                    "coord_x" : 1160,
+                    "coord_y" : 610
+                },
+                {
+                    "coord_x" : 605,
+                    "coord_y" : 610
+                },
+                {
+                    "coord_x" : 605,
+                    "coord_y" : 415
                 }
 
             ],
-            "cantidad_plataformas" : 3,
+            "cantidad_plataformas" : 4,
             "coords_plataformas":
             [
                 {
-                    "coord_x": -20,
-                    "coord_y": 570,
-                    "ancho" : 850,
+                    "coord_x": -40,
+                    "coord_y": 665,
+                    "ancho" : 1340,
                     "alto" : 150
                 },
                 {
-                    "coord_x": 450,
-                    "coord_y": 100,
-                    "ancho" : 200,
-                    "alto" : 100
+                    "coord_x": 480,
+                    "coord_y": 470,
+                    "ancho" : 300,
+                    "alto" : 115
                 },
                 {
-                    "coord_x": 15,
-                    "coord_y": 350,
-                    "ancho" : 300,
-                    "alto" : 100
+                    "coord_x": 0,
+                    "coord_y": 280,
+                    "ancho" : 400,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 870,
+                    "coord_y": 280,
+                    "ancho" : 400,
+                    "alto" : 115
                 }
             ],
-            "cantidad_trampas" : 2,
+            "cantidad_trampas" : 4,
             "coords_trampas" : 
             [
                 {
-                    "coord_x": 400,
-                    "coord_y": 570,
-                    "ancho" : 50,
-                    "alto" : 30
+                    "coord_x": 150,
+                    "coord_y": 620,
+                    "ancho" : 180,
+                    "alto" : 100
                 },
                 {
-                    "coord_x": 550,
-                    "coord_y": 100,
-                    "ancho" : 30,
-                    "alto" : 20
+                    "coord_x": 925,
+                    "coord_y": 620,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 150,
+                    "coord_y": 240,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 925,
+                    "coord_y": 240,
+                    "ancho" : 180,
+                    "alto" : 100
                 }
             ]
         }
+    },
+    "nivel_2" : 
+    {
+        "background" : 
+        {
+            "sprites" : 
+            {
+                "background" : "assets/img/background/background.png"
+            }    
+        },
+        "gui" :
+        {
+            "images" :
+            {
+                "tablon_madera" : "assets/gui/wooden_plank.png"
+            }
+        },
+        "fuentes" : 
+        { 
+            "palabras" : "assets/font/words_font.ttf",
+            "numeros" : "assets/font/numbers_font.ttf"
+        },
+        "jugador" : 
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/player/iddle/iddle.png",
+                "walk" : "assets/img/player/walk/walk.png",
+                "run" : "assets/img/player/run/run.png",
+                "shoot" : "assets/img/player/shoot/shoot.png",
+                "jump" : "assets/img/player/jump/jump.png",
+                "die" : "assets/img/player/die/die_5.png"
+            },
+            "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
+            "velocidad_proyectil" : 20
 
+        },
+        "minion" :
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/minions/iddle/iddle.png",
+                "walk" : "assets/img/minions/walk/walk.png",
+                "run" : "assets/img/minions/run/run.png",
+                "shoot" : "assets/img/minions/shoot/shoot.png"
+            },
+            "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
+            "velocidad_proyectil" : 15,
+            "speed" : 6,
+            "shoot_cooldown" : 2000,
+            "animation_time_cooldown" : 320 
+        },
+        "plataforma" :
+        {
+            "sprites" : 
+            {
+                "image" : "assets/img/plataforma/plataforma_1.png"  
+            } 
+        },
+        "trampa" : 
+        {
+            "sprites" : 
+            {
+                "image" : "assets/img/trampa/trampa_2.png"
+            }
+        },
+        "fruta":
+        {
+            "sprites" :
+            {
+                "main" : "assets/img/frutas/iddle/apple_iddle.png"
+            }
+        },
+        "stats_nivel" : 
+        {
+            "cantidad_enemigos" : 2,
+            "coords_enemigos" : 
+            [
+                {
+                    "coord_x": 730,
+                    "coord_y": 200
+                },
+                {
+                    "coord_x": 15,
+                    "coord_y": 600
+                }
+            ],
+            "cantidad_frutas" : 5,
+            "coords_frutas" : 
+            [
+                {
+                    "coord_x" : 255,
+                    "coord_y" : 40
+                },
+                {
+                    "coord_x" : 610,
+                    "coord_y" : 40
+                },
+                {
+                    "coord_x" : 1060,
+                    "coord_y" : 400
+                },
+                {
+                    "coord_x" : 650,
+                    "coord_y" : 540
+                },
+                {
+                    "coord_x" : 90,
+                    "coord_y" : 330
+                }
+
+            ],
+            "cantidad_plataformas" : 5,
+            "coords_plataformas":
+            [
+                {
+                    "coord_x": -40,
+                    "coord_y": 200,
+                    "ancho" : 1000,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 940,
+                    "coord_y": 600,
+                    "ancho" : 300,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 560,
+                    "coord_y": 600,
+                    "ancho" : 240,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 20,
+                    "coord_y": 600,
+                    "ancho" : 400,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 20,
+                    "coord_y": 400,
+                    "ancho" : 200,
+                    "alto" : 115
+                }
+            ],
+            "cantidad_trampas" : 3,
+            "coords_trampas" : 
+            [
+                {
+                    "coord_x": 150,
+                    "coord_y": 560,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 200,
+                    "coord_y": 160,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 550,
+                    "coord_y": 160,
+                    "ancho" : 180,
+                    "alto" : 100
+                }
+            ]
+        }
+    },
+    "nivel_3" : 
+    {
+        "background" : 
+        {
+            "sprites" : 
+            {
+                "background" : "assets/img/background/background.png"
+            }    
+        },
+        "gui" :
+        {
+            "images" :
+            {
+                "tablon_madera" : "assets/gui/wooden_plank.png"
+            }
+        },
+        "fuentes" : 
+        { 
+            "palabras" : "assets/font/words_font.ttf",
+            "numeros" : "assets/font/numbers_font.ttf"
+        },
+        "jugador" : 
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/player/iddle/iddle.png",
+                "walk" : "assets/img/player/walk/walk.png",
+                "run" : "assets/img/player/run/run.png",
+                "shoot" : "assets/img/player/shoot/shoot.png",
+                "jump" : "assets/img/player/jump/jump.png",
+                "die" : "assets/img/player/die/die_5.png"
+            },
+            "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
+            "velocidad_proyectil" : 20
+
+        },
+        "minion" :
+        {
+            "sprites" : 
+            {
+                "iddle" : "assets/img/minions/iddle/iddle.png",
+                "walk" : "assets/img/minions/walk/walk.png",
+                "run" : "assets/img/minions/run/run.png",
+                "shoot" : "assets/img/minions/shoot/shoot.png"
+            },
+            "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
+            "velocidad_proyectil" : 15,
+            "speed" : 6,
+            "shoot_cooldown" : 2000,
+            "animation_time_cooldown" : 320 
+        },
+        "plataforma" :
+        {
+            "sprites" : 
+            {
+                "image" : "assets/img/plataforma/plataforma_1.png"  
+            } 
+        },
+        "trampa" : 
+        {
+            "sprites" : 
+            {
+                "image" : "assets/img/trampa/trampa_2.png"
+            }
+        },
+        "fruta":
+        {
+            "sprites" :
+            {
+                "main" : "assets/img/frutas/iddle/apple_iddle.png"
+            }
+        },
+        "stats_nivel" : 
+        {
+            "cantidad_enemigos" : 2,
+            "coords_enemigos" : 
+            [
+                {
+                    "coord_x": 730,
+                    "coord_y": 200
+                },
+                {
+                    "coord_x": 15,
+                    "coord_y": 600
+                }
+            ],
+            "cantidad_frutas" : 5,
+            "coords_frutas" : 
+            [
+                {
+                    "coord_x" : 255,
+                    "coord_y" : 40
+                },
+                {
+                    "coord_x" : 610,
+                    "coord_y" : 40
+                },
+                {
+                    "coord_x" : 1060,
+                    "coord_y" : 400
+                },
+                {
+                    "coord_x" : 650,
+                    "coord_y" : 540
+                },
+                {
+                    "coord_x" : 90,
+                    "coord_y" : 330
+                }
+
+            ],
+            "cantidad_plataformas" : 5,
+            "coords_plataformas":
+            [
+                {
+                    "coord_x": -40,
+                    "coord_y": 200,
+                    "ancho" : 1000,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 940,
+                    "coord_y": 600,
+                    "ancho" : 300,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 560,
+                    "coord_y": 600,
+                    "ancho" : 240,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 20,
+                    "coord_y": 600,
+                    "ancho" : 400,
+                    "alto" : 115
+                },
+                {
+                    "coord_x": 20,
+                    "coord_y": 400,
+                    "ancho" : 200,
+                    "alto" : 115
+                }
+            ],
+            "cantidad_trampas" : 3,
+            "coords_trampas" : 
+            [
+                {
+                    "coord_x": 150,
+                    "coord_y": 560,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 200,
+                    "coord_y": 160,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 550,
+                    "coord_y": 160,
+                    "ancho" : 180,
+                    "alto" : 100
+                }
+            ]
+        }
     }
 }

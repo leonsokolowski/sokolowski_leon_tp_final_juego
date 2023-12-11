@@ -12,18 +12,18 @@ class Plataforma(pg.sprite.Sprite):
         self.rect = self.imagen_plataforma.get_rect()
         self.rect.x = coord_x
         self.rect.y = coord_y
-        #self.rect_top_platform = pg.Rect(self.rect.x, self.rect.y - 20, self.rect.w, 5)
+        self.rect_limite_derecha = pg.Rect(self.rect.x + ancho - 10, self.rect.y - 35, 10, 60)
+        self.rect_limite_izquierda = pg.Rect(self.rect.x, self.rect.y - 35, 10, 60)
         
         
     def update(self, screen : pg.surface.Surface):
         if(DEBUG):
             pg.draw.rect(screen, "red", self.rect)
+            pg.draw.rect(screen, "green", self.rect_limite_derecha)
+            pg.draw.rect(screen, "green", self.rect_limite_izquierda)
 
         self.draw(screen)
 
-        # if(DEBUG):
-        #     pg.draw.rect(screen,"red",self.rect_top_platform)
     
     def draw(self, screen : pg.surface.Surface):
         screen.blit(self.imagen_plataforma,self.rect)
-        #screen.blit(self.imagen_plataforma, self.rect_top_platform )

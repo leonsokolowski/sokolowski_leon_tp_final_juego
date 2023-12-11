@@ -4,13 +4,15 @@ from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
 from models.proyectil import Proyectil
 
 class Jugador(pg.sprite.Sprite):
-    def __init__(self, coord_x, coord_y, dict_configs_nivel : dict, frame_rate = 100, speed_walk = 6, speed_run = 12, gravity = 20, jump = 50):
+    def __init__(self, coord_x, coord_y, dict_configs_nivel : dict, frame_rate = 100, speed_walk = 30, speed_run = 60, gravity = 20, jump = 80):
         super().__init__()
         
         self.config_jugador = dict_configs_nivel.get("jugador")
         self.puntaje = 0
+        #Recibir daño
         self.vidas = 5
         self.is_alive = True
+        self.invulnerable = False
         #animacion
         self.sprites_jugador = self.config_jugador.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
@@ -23,7 +25,8 @@ class Jugador(pg.sprite.Sprite):
         self.__run_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("run"), 10, 1, flip = True)
         self.__shoot_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1)
         self.__shoot_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("shoot"), 8, 1, flip = True)
-        self.__die = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("die"), 11, 1)
+        self.__die_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("die"), 13, 1)
+        self.__die_l = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("die"), 13, 1, flip = True)
         self.__player_animation_time = 0
         self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
@@ -53,11 +56,13 @@ class Jugador(pg.sprite.Sprite):
         
         #disparo
         self.projectile_time = 0
-        self.projectile_cooldown = 550
+        self.projectile_cooldown = 560
+        self.velocidad_proyectil = self.config_jugador.get("velocidad_proyectil")
         self.projectile_group = pg.sprite.Group()
 
         #plataformas
         self.rect_feet_collition = pg.Rect(self.rect_hitbox.x + self.rect_hitbox.w/4, self.rect_hitbox.y + self.rect_hitbox.h - 5, self.rect_hitbox.w/2, 5)
+        
         
     @property
     def obtener_estado_jumping (self):
@@ -80,17 +85,20 @@ class Jugador(pg.sprite.Sprite):
     def obtener_move_y(self,move_y):
         self.__move_y = move_y
     
-    def recibir_disparo_y_comprobar_vidas (self):
-        self.vidas -= 1
+    def recibir_daño_y_comprobar_vidas (self):
+        if self.invulnerable == False:
+            self.vidas -= 1
         if self.vidas <= 0:
             self.is_alive = False
-            # self.__actual_frame_index = 0
-            if self.__actual_animation != self.__die and self.__actual_animation != self.__die:
-                self.__actual_animation = self.__die
+            if self.__is_looking_right:
+                self.__actual_animation = self.__die_r
+            else:
+                self.__actual_animation = self.__die_l
             
     def morir (self):
         #Aca hacemos cosas que necesitamos que pasen antes de morir.
         self.kill()
+        
     
     def __set_x_animations_preset(self, move_x, animation_list : list[pg.surface.Surface], look_r : bool):
         self.__move_x = move_x
@@ -112,6 +120,7 @@ class Jugador(pg.sprite.Sprite):
         pixel_inicial_salto = self.rect_hitbox.top
         if (self.is_on_land == True and pixel_inicial_salto - self.__jump != 1000) and not self.is_landing and not self.is_jumping: 
             self.__move_y -= self.__jump
+            #self.__actual_animation = self.__jump_r if self.__is_looking_right else self.__jump_l
             self.is_jumping = True
             self.is_on_land = False
         elif pixel_inicial_salto - self.__jump >= 1000 or (self.is_jumping == False and self.is_on_land == False):
@@ -197,7 +206,7 @@ class Jugador(pg.sprite.Sprite):
         else:
             rect_direction = self.rect.left
             direction = "left"
-        return Proyectil(rect_direction, self.rect.centery, direction, self.config_jugador, not self.__is_looking_right)
+        return Proyectil(rect_direction, self.rect.centery, direction, self.config_jugador, self.velocidad_proyectil, not self.__is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()
@@ -205,23 +214,27 @@ class Jugador(pg.sprite.Sprite):
     
     def do_movement(self, delta_ms): #Relacionado al movimiento
         self.__player_move_time += delta_ms
-        if self.__player_move_time >= self.__frame_rate:
-            self.__player_move_time	= 0
-            self.rect.x += self.__set_borders_limit_x()
-            self.rect.y += self.__set_borders_limit_y()
-            self.rect_hitbox.x += self.__set_borders_limit_x()
-            self.rect_hitbox.y += self.__set_borders_limit_y()
-            self.rect_feet_collition.x += self.__set_borders_limit_x()
-            self.rect_feet_collition.y += self.__set_borders_limit_y()
-            #Parte relacionada a saltar
-            if not self.is_on_land:
-                self.__move_y += self.__gravity
-                #self.rect_hitbox.y += self.__gravity
-                #self.rect_feet_collition.y += self.__gravity
-                #self.is_on_land = True
-                self.is_landing = True
-            else:
-                self.__move_y = 0
+        if self.is_alive:
+            if self.__player_move_time >= self.__frame_rate:
+                self.__player_move_time	= 0
+                self.rect.x += self.__set_borders_limit_x()
+                self.rect.y += self.__set_borders_limit_y()
+                self.rect_hitbox.x += self.__set_borders_limit_x()
+                self.rect_hitbox.y += self.__set_borders_limit_y()
+                self.rect_feet_collition.x += self.__set_borders_limit_x()
+                self.rect_feet_collition.y += self.__set_borders_limit_y()
+                #Parte relacionada a saltar
+                if not self.is_on_land:
+                    self.__move_y += self.__gravity
+                    #self.rect_hitbox.y += self.__gravity
+                    #self.rect_feet_collition.y += self.__gravity
+                    #self.is_on_land = True
+                    self.is_landing = True
+                else:
+                    self.__move_y = 0
+        else:
+            self.__move_x = 0
+            self.__move_y = 0
 
     
     def do_animation(self, delta_ms):
@@ -240,21 +253,21 @@ class Jugador(pg.sprite.Sprite):
     def keyboard_events (self):
             
         lista_teclas_presionadas = pg.key.get_pressed()
-        
-        if lista_teclas_presionadas[pg.K_RIGHT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_LEFT]:
-            self.run("Right")
-        if lista_teclas_presionadas[pg.K_LEFT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT]:
-            self.run("Left")
-        if lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
-            self.walk("Right")
-        if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
-            self.walk("Left")
-        # elif lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
-        #     self.jump()
-        if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
-            self.shoot() 
-        if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_SPACE]:
-            self.stay()
+        if self.is_alive:
+            if lista_teclas_presionadas[pg.K_RIGHT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_LEFT]:
+                self.run("Right")
+            if lista_teclas_presionadas[pg.K_LEFT] and lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT]:
+                self.run("Left")
+            if lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
+                self.walk("Right")
+            if lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LSHIFT]:
+                self.walk("Left")
+            # elif lista_teclas_presionadas[pg.K_UP] and not lista_teclas_presionadas[pg.K_SPACE]:
+            #     self.jump()
+            if lista_teclas_presionadas[pg.K_SPACE] and not lista_teclas_presionadas[pg.K_LSHIFT] and not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
+                self.shoot() 
+            if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT] and not lista_teclas_presionadas[pg.K_SPACE]:
+                self.stay()
             
     
     def update(self, delta_ms, screen: pg.surface.Surface):

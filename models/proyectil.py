@@ -1,8 +1,8 @@
 import pygame as pg
-from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA
+from auxiliar.constantes import ANCHO_VENTANA, ALTO_VENTANA, DEBUG
 
 class Proyectil(pg.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, direction, dict_configs_nivel : dict, flip : bool = False): 
+    def __init__(self, pos_x, pos_y, direction, dict_configs_nivel : dict, velocidad_proyectil : int, flip : bool = False): 
         super().__init__()
         
         self.config_proyectil = dict_configs_nivel
@@ -10,6 +10,7 @@ class Proyectil(pg.sprite.Sprite):
         self.__load_img()
         self.rect = self.image.get_rect(center=(pos_x, pos_y))
         self.direction = direction
+        self.velocidad_proyectil = velocidad_proyectil
         
 
     def __load_img(self):
@@ -21,15 +22,15 @@ class Proyectil(pg.sprite.Sprite):
         
         match self.direction:
             case "right":
-                self.rect.x += 20
+                self.rect.x += self.velocidad_proyectil
                 if self.rect.x >= ANCHO_VENTANA:
                     self.kill()
             case "left":
-                self.rect.x -= 20
+                self.rect.x -= self.velocidad_proyectil
                 if self.rect.x <= 0:
                     self.kill()
             case "up":
-                self.rect.y += 20
+                self.rect.y += 15
                 if self.rect.y >= ALTO_VENTANA:
                     self.kill()
             # case "down":
@@ -40,4 +41,7 @@ class Proyectil(pg.sprite.Sprite):
         self.draw(screen)
     
     def draw(self, screen: pg.surface.Surface):
+        if DEBUG:
+            pg.draw.rect(screen, "red", self.rect)
+            
         screen.blit(self.image, self.rect)

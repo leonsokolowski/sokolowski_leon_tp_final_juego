@@ -29,7 +29,7 @@ class Minion(pg.sprite.Sprite):
         self.rect.y = coord_y
         self.move_y = 0
         self.move_x = 0
-        self.__is_looking_right = True
+        self.is_looking_right = True
         self.__speed_walk = self.config_minion.get("speed")
         self.__frame_rate = frame_rate
         self.__minion_move_time = 0
@@ -42,23 +42,24 @@ class Minion(pg.sprite.Sprite):
         #disparo
         self.projectile_time = 0
         self.projectile_cooldown = self.config_minion.get("shoot_cooldown")
+        self.velocidad_proyectil = self.config_minion.get("velocidad_proyectil")
         self.projectile_group = pg.sprite.Group()
         
 
         
     def movimiento(self):  # Ajusta al minion a los limites de la pantalla
-        if self.__is_looking_right:
+        if self.is_looking_right:
             if (self.rect.right + self.__speed_walk ) <= self.__limite_x:
                 self.__actual_animation = self.__walk_r
                 self.rect.x += self.__speed_walk
             else:
-                self.__is_looking_right = False
+                self.is_looking_right = False
         else:
             if self.rect.left - self.__speed_walk >= 0:
                 self.__actual_animation = self.__walk_l
                 self.rect.x -= self.__speed_walk
             else:
-                self.__is_looking_right = True
+                self.is_looking_right = True
         
 
     
@@ -86,7 +87,7 @@ class Minion(pg.sprite.Sprite):
     def shoot_animation(self):
         if self.__actual_animation != self.__shoot_r and self.__actual_animation != self.__shoot_l:
                 
-                if self.__is_looking_right:
+                if self.is_looking_right:
                     self.__actual_animation = self.__shoot_r
                 else:
                     self.__actual_animation = self.__shoot_l
@@ -94,13 +95,13 @@ class Minion(pg.sprite.Sprite):
                 
         
     def create_projectile(self):
-        if self.__is_looking_right:
+        if self.is_looking_right:
             rect_direction = self.rect.right
             direction = "right"
         else:
             rect_direction = self.rect.left
             direction = "left"   
-        return Proyectil(rect_direction, self.rect.centery, direction, self.config_minion, not self.__is_looking_right)
+        return Proyectil(rect_direction, self.rect.centery, direction, self.config_minion, self.velocidad_proyectil, not self.is_looking_right)
 
     def cooldown_to_shoot (self) -> bool:
         current_time= pg.time.get_ticks()
