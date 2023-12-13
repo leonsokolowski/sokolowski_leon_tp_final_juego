@@ -259,7 +259,13 @@
             "velocidad_proyectil" : 15,
             "speed" : 6,
             "shoot_cooldown" : 2000,
-            "animation_time_cooldown" : 320 
+            "animation_time_cooldown" : 320,
+            "sonidos" : 
+            {
+                "ataque" : "assets/banda_sonora/sonidos/minion/gunter_ataque.mp3",
+                "bola" : "assets/banda_sonora/sonidos/minion/bola_de_nieve.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/minion/gunter_muerte.mp3"
+            } 
         },
         "plataforma" :
         {
@@ -443,7 +449,13 @@
             "velocidad_proyectil" : 15,
             "speed" : 6,
             "shoot_cooldown" : 2000,
-            "animation_time_cooldown" : 320 
+            "animation_time_cooldown" : 320,
+            "sonidos" : 
+            {
+                "ataque" : "assets/banda_sonora/sonidos/minion/gunter_ataque.mp3",
+                "bola" : "assets/banda_sonora/sonidos/minion/bola_de_nieve.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/minion/gunter_muerte.mp3"
+            } 
         },
         "plataforma" :
         {

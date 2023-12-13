@@ -68,6 +68,7 @@ class Minion(pg.sprite.Sprite):
         self.vidas -= 1
         if self.vidas <= 0:
             self.is_alive = False
+            self.sonido_muerte.play()
         if self.is_looking_right:    
             self.__actual_animation = self.__die_r
         else:
@@ -76,7 +77,6 @@ class Minion(pg.sprite.Sprite):
     
     def morir (self):
         #Aca hacemos cosas que necesitamos que pasen antes de morir.
-        self.sonido_muerte.play()
         self.kill()
                 
     def movimiento(self):  # Ajusta al minion a los limites de la pantalla

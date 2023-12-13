@@ -57,12 +57,7 @@ class Juego:
                             juego.sprite_jugador.sonido_salto.play()
                             juego.sprite_jugador.jump()
                             juego.sprite_jugador.jump()
-                            
-                                
-                            
-            
-        
-                        
+                                      
         
             momento_actual =  pg.time.get_ticks() // 1000
             #print("hola", momento_anterior)
@@ -88,9 +83,6 @@ class Juego:
             pantalla.blit(palabra_tiempo, (485,8))
             pantalla.blit(fuente_numeros.render(momento_actual, True, "white"), (625, 10))
             
-            
-            
-
             pg.display.update()
 
     pg.quit()

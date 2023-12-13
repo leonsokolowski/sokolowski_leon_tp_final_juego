@@ -109,6 +109,7 @@ class Jugador(pg.sprite.Sprite):
             self.sonido_damage.play()
         if self.vidas <= 0:
             self.is_alive = False
+            self.sonido_muerte.play()
             if self.__is_looking_right:
                 self.__actual_animation = self.__die_r
             else:
@@ -116,7 +117,6 @@ class Jugador(pg.sprite.Sprite):
             
     def morir (self):
         #Aca hacemos cosas que necesitamos que pasen antes de morir.
-        self.sonido_muerte.play()
         self.kill()
         
     
