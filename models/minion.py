@@ -8,6 +8,9 @@ class Minion(pg.sprite.Sprite):
         super().__init__()
         
         self.config_minion = dict_configs_nivel.get("minion")
+        #recibir daño
+        self.vidas = 1
+        self.is_alive = True
         #animacion
         self.sprites_minion = self.config_minion.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_minion.get("iddle"), 6, 1)
@@ -18,6 +21,8 @@ class Minion(pg.sprite.Sprite):
         self.__run_l = sf.get_surface_from_spritesheeet(self.sprites_minion.get("run"), 6, 1, flip = True)
         self.__shoot_r = sf.get_surface_from_spritesheeet(self.sprites_minion.get("shoot"), 4, 1)
         self.__shoot_l = sf.get_surface_from_spritesheeet(self.sprites_minion.get("shoot"), 4, 1, flip = True)
+        self.__die_r = sf.get_surface_from_spritesheeet(self.sprites_minion.get("die"), 11, 1)
+        self.__die_l = sf.get_surface_from_spritesheeet(self.sprites_minion.get("die"), 11, 1, flip = True)
         self.__minion_animation_time = 0
         self.__actual_frame_index = 0 #Controla el frame de la lista de animaciones en el que nos encontramos
         self.__actual_animation = self.__iddle_r #Al aparecer el personaje aparece con esta animación
@@ -45,33 +50,50 @@ class Minion(pg.sprite.Sprite):
         self.velocidad_proyectil = self.config_minion.get("velocidad_proyectil")
         self.projectile_group = pg.sprite.Group()
         
-
+        #sonidos
+        self.sonidos_minion = self.config_minion.get("sonidos")
+        self.lista_sonidos_minion = []
+        pg.mixer.pre_init(44100, -16, 2, 512)
+        self.sonido_ataque = pg.mixer.Sound(self.sonidos_minion.get("ataque"))
+        self.lista_sonidos_minion.append(self.sonido_ataque)
+        self.sonido_bola = pg.mixer.Sound(self.sonidos_minion.get("bola"))
+        self.lista_sonidos_minion.append(self.sonido_bola)
+        self.sonido_muerte = pg.mixer.Sound(self.sonidos_minion.get("muerte"))
+        self.lista_sonidos_minion.append(self.sonido_muerte)
         
-    def movimiento(self):  # Ajusta al minion a los limites de la pantalla
-        if self.is_looking_right:
-            if (self.rect.right + self.__speed_walk ) <= self.__limite_x:
-                self.__actual_animation = self.__walk_r
-                self.rect.x += self.__speed_walk
-            else:
-                self.is_looking_right = False
-        else:
-            if self.rect.left - self.__speed_walk >= 0:
-                self.__actual_animation = self.__walk_l
-                self.rect.x -= self.__speed_walk
-            else:
-                self.is_looking_right = True
-        
-
+        for sonido in self.lista_sonidos_minion:
+            sonido.set_volume(0.3)
     
-    def __set_borders_limit_y(self): #Relacionado al movimiento
-        pixels_move = 0
-        if self.move_y > 0:
-            pixels_move = self.move_y if self.rect.bottom < ALTO_VENTANA else 0 #- self.__actual_image_animation.get_height()
-            print(pixels_move)
-        elif self.move_y < 0:
-            pixels_move = self.move_y if self.rect.top > 0 else 0
-            print(pixels_move)
-        return pixels_move
+    def minion_recibir_daño_y_comprobar_vidas(self):
+        self.vidas -= 1
+        if self.vidas <= 0:
+            self.is_alive = False
+        if self.is_looking_right:    
+            self.__actual_animation = self.__die_r
+        else:
+            self.__actual_animation = self.__die_l
+        
+    
+    def morir (self):
+        #Aca hacemos cosas que necesitamos que pasen antes de morir.
+        self.sonido_muerte.play()
+        self.kill()
+                
+    def movimiento(self):  # Ajusta al minion a los limites de la pantalla
+        if self.is_alive:
+            if self.is_looking_right:
+                if (self.rect.right + self.__speed_walk ) <= self.__limite_x:
+                    self.__actual_animation = self.__walk_r
+                    self.rect.x += self.__speed_walk
+                else:
+                    self.is_looking_right = False
+            else:
+                if self.rect.left - self.__speed_walk >= 0:
+                    self.__actual_animation = self.__walk_l
+                    self.rect.x -= self.__speed_walk
+                else:
+                    self.is_looking_right = True
+
     
     @property
     def get_projectiles(self) -> list[Proyectil]:
@@ -81,6 +103,8 @@ class Minion(pg.sprite.Sprite):
         if self.cooldown_to_shoot():
             self.__current_time_animation = pg.time.get_ticks()
             self.shoot_animation()
+            self.sonido_ataque.play()
+            self.sonido_bola.play()
             self.projectile_group.add(self.create_projectile())
             self.projectile_time = pg.time.get_ticks()
    
@@ -109,20 +133,21 @@ class Minion(pg.sprite.Sprite):
     
     def do_movement(self, delta_ms):
         self.__minion_move_time += delta_ms
-        if self.__minion_move_time >= self.__frame_rate:
-            current_time = pg.time.get_ticks()
-            self.__minion_move_time = 0
-            self.shoot()
-            if current_time - self.__current_time_animation > self.config_minion.get("animation_time_cooldown"):
-                self.movimiento()
-            # if self.rect.y < 525:
-            #     self.rect.y += self.__gravity
-            if not self.is_on_land:
-                self.move_y += self.__gravity
-                #self.is_on_land = True
-                self.is_landing = True
-            else:
-                self.move_y = 0
+        if self.is_alive:
+            if self.__minion_move_time >= self.__frame_rate:
+                current_time = pg.time.get_ticks()
+                self.__minion_move_time = 0
+                self.shoot()
+                if current_time - self.__current_time_animation > self.config_minion.get("animation_time_cooldown"):
+                    self.movimiento()
+                # if self.rect.y < 525:
+                #     self.rect.y += self.__gravity
+                if not self.is_on_land:
+                    self.move_y += self.__gravity
+                    #self.is_on_land = True
+                    self.is_landing = True
+                else:
+                    self.move_y = 0
 
     
     def do_animation(self, delta_ms):
@@ -132,7 +157,11 @@ class Minion(pg.sprite.Sprite):
             if self.__actual_frame_index < len(self.__actual_animation) - 1:
                 self.__actual_frame_index += 1
             else:
-                self.__actual_frame_index = 0
+                if self.is_alive:
+                    self.__actual_frame_index = 0
+                else:
+                    self.morir()
+
     
     
     

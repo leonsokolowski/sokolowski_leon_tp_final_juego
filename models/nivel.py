@@ -15,7 +15,7 @@ class Nivel:
         self.nivel_actual = nivel_actual
         #Vacio
         match self.nivel_actual:
-            case "nivel_2":
+            case "nivel_2" | "nivel_3":
                 self.sprite_vacio = Vacio(0,620,1270, 100)
                 self.vacio = pg.sprite.GroupSingle(self.sprite_vacio)
         #Atributos de las plataformas
@@ -36,6 +36,8 @@ class Nivel:
                 self.sprite_jugador = Jugador(0, 600, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
             case "nivel_2":
                 self.sprite_jugador = Jugador(0, 0, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
+            case "nivel_3":
+                self.sprite_jugador = Jugador(0, 500, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
         self.jugador = pg.sprite.GroupSingle(self.sprite_jugador)
         
         #Atributos de los Minions
@@ -90,9 +92,8 @@ class Nivel:
                 self.frutas.add(Fruta(self.cordenadas_frutas[coordenada].get("coord_x"),self.cordenadas_frutas[coordenada].get("coord_y"), self.config_nivel))     
     
     def run(self, delta_ms):
-        match self.nivel_actual:
-            case "nivel_2":
-                self.vacio.update(self.pantalla)
+        if self.nivel_actual == "nivel_2" or self.nivel_actual == "nivel_3":
+            self.vacio.update(self.pantalla)
         self.plataformas.update(self.pantalla)
         self.trampas.update(self.pantalla)
         self.minions.update(delta_ms, self.pantalla)
@@ -103,7 +104,7 @@ class Nivel:
     def check_collides(self):   
             
             #Vacio con Jugador
-            if self.nivel_actual == "nivel_2":
+            if self.nivel_actual == "nivel_2" or self.nivel_actual == "nivel_3":
                 if self.sprite_jugador.is_alive:
                     if self.sprite_vacio.rect_hitbox.colliderect(self.sprite_jugador.rect_feet_collition):
                         self.sprite_jugador.vidas = 1
@@ -112,13 +113,15 @@ class Nivel:
             if self.sprite_jugador.is_alive:
                 for projectile in self.sprite_jugador.get_projectiles:
                     cantidad_minions_antes = len(self.minions)
-                    if pg.sprite.spritecollide(projectile, self.minions, True):
-                        projectile.kill()
-                        cantidad_minions_despues = len(self.minions)
-                        if cantidad_minions_antes > cantidad_minions_despues:
-                            cantidad_vencido = cantidad_minions_antes - cantidad_minions_despues
-                            self.sprite_jugador.puntaje += cantidad_vencido * 100
-                            print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
+                    for minion in self.minions:
+                        if projectile.rect.colliderect(minion.rect):
+                            minion.minion_recibir_daño_y_comprobar_vidas()
+                            projectile.kill()
+                            cantidad_minions_despues = len(self.minions)
+                            if cantidad_minions_antes > cantidad_minions_despues:
+                                cantidad_vencido = cantidad_minions_antes - cantidad_minions_despues
+                                self.sprite_jugador.puntaje += cantidad_vencido * 100
+                                print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
             
             #Disparo Minion a Jugador
             for minion in self.minions:    
@@ -192,6 +195,7 @@ class Nivel:
                 if self.sprite_jugador.is_alive:
                     if self.sprite_jugador.rect_hitbox.colliderect(fruta.rect):
                         fruta.kill()
+                        self.sprite_jugador.sonido_manzana.play()
                         cantidad_frutas_despues = len(self.frutas)
                         print("Fruta conseguida")
                         if cantidad_frutas_antes > cantidad_frutas_despues:

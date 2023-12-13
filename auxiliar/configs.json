@@ -20,6 +20,12 @@
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
         },
+        "musica" : 
+        {   
+            "menu" : "assets/banda_sonora/musica/menu.mp3",
+            "level" : "assets/banda_sonora/musica/level.mp3",
+            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
+        },
         "jugador" : 
         {
             "sprites" : 
@@ -32,7 +38,16 @@
                 "die" : "assets/img/player/die/die_5.png"
             },
             "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
-            "velocidad_proyectil" : 20
+            "velocidad_proyectil" : 20,
+            "sonidos":
+            {
+                "ataque" : "assets/banda_sonora/sonidos/player/finn_ataque.mp3",
+                "espada" : "assets/banda_sonora/sonidos/player/sonido_espada.wav",
+                "damage" : "assets/banda_sonora/sonidos/player/finn_get_hit.mp3",
+                "salto" : "assets/banda_sonora/sonidos/player/finn_jump.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/player/finn_muerte.mp3",
+                "manzana" : "assets/banda_sonora/sonidos/player/finn_get_manzana.mp3"
+            }
 
         },
         "minion" :
@@ -42,13 +57,21 @@
                 "iddle" : "assets/img/minions/iddle/iddle.png",
                 "walk" : "assets/img/minions/walk/walk.png",
                 "run" : "assets/img/minions/run/run.png",
-                "shoot" : "assets/img/minions/shoot/shoot.png"
+                "shoot" : "assets/img/minions/shoot/shoot.png",
+                "die" : "assets/img/minions/die/die.png"
             },
             "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
             "velocidad_proyectil" : 15,
             "speed" : 6,
             "shoot_cooldown" : 2000,
-            "animation_time_cooldown" : 320 
+            "animation_time_cooldown" : 320,
+            "sonidos" : 
+            {
+                "ataque" : "assets/banda_sonora/sonidos/minion/gunter_ataque.mp3",
+                "bola" : "assets/banda_sonora/sonidos/minion/bola_de_nieve.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/minion/gunter_muerte.mp3"
+            }
+             
         },
         "plataforma" :
         {
@@ -193,6 +216,12 @@
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
         },
+        "musica" : 
+        {   
+            "menu" : "assets/banda_sonora/musica/menu.mp3",
+            "level" : "assets/banda_sonora/musica/level.mp3",
+            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
+        },
         "jugador" : 
         {
             "sprites" : 
@@ -205,8 +234,16 @@
                 "die" : "assets/img/player/die/die_5.png"
             },
             "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
-            "velocidad_proyectil" : 20
-
+            "velocidad_proyectil" : 20,
+            "sonidos":
+            {
+                "ataque" : "assets/banda_sonora/sonidos/player/finn_ataque.mp3",
+                "espada" : "assets/banda_sonora/sonidos/player/sonido_espada.wav",
+                "damage" : "assets/banda_sonora/sonidos/player/finn_get_hit.mp3",
+                "salto" : "assets/banda_sonora/sonidos/player/finn_jump.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/player/finn_muerte.mp3",
+                "manzana" : "assets/banda_sonora/sonidos/player/finn_get_manzana.mp3"
+            }
         },
         "minion" :
         {
@@ -215,7 +252,8 @@
                 "iddle" : "assets/img/minions/iddle/iddle.png",
                 "walk" : "assets/img/minions/walk/walk.png",
                 "run" : "assets/img/minions/run/run.png",
-                "shoot" : "assets/img/minions/shoot/shoot.png"
+                "shoot" : "assets/img/minions/shoot/shoot.png",
+                "die" : "assets/img/minions/die/die.png"
             },
             "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
             "velocidad_proyectil" : 15,
@@ -362,6 +400,12 @@
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
         },
+        "musica" : 
+        {   
+            "menu" : "assets/banda_sonora/musica/menu.mp3",
+            "level" : "assets/banda_sonora/musica/level.mp3",
+            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
+        },
         "jugador" : 
         {
             "sprites" : 
@@ -374,8 +418,16 @@
                 "die" : "assets/img/player/die/die_5.png"
             },
             "proyectil" : "assets/img/player/proyectil/tajo_espada.png",
-            "velocidad_proyectil" : 20
-
+            "velocidad_proyectil" : 20,
+            "sonidos":
+            {
+                "ataque" : "assets/banda_sonora/sonidos/player/finn_ataque.mp3",
+                "espada" : "assets/banda_sonora/sonidos/player/sonido_espada.wav",
+                "damage" : "assets/banda_sonora/sonidos/player/finn_get_hit.mp3",
+                "salto" : "assets/banda_sonora/sonidos/player/finn_jump.mp3",
+                "muerte" : "assets/banda_sonora/sonidos/player/finn_muerte.mp3",
+                "manzana" : "assets/banda_sonora/sonidos/player/finn_get_manzana.mp3"
+            }
         },
         "minion" :
         {
@@ -384,7 +436,8 @@
                 "iddle" : "assets/img/minions/iddle/iddle.png",
                 "walk" : "assets/img/minions/walk/walk.png",
                 "run" : "assets/img/minions/run/run.png",
-                "shoot" : "assets/img/minions/shoot/shoot.png"
+                "shoot" : "assets/img/minions/shoot/shoot.png",
+                "die" : "assets/img/minions/die/die.png"
             },
             "proyectil" : "assets/img/minions/proyectil/bola_de_nieve.png",
             "velocidad_proyectil" : 15,
@@ -415,40 +468,48 @@
         },
         "stats_nivel" : 
         {
-            "cantidad_enemigos" : 2,
+            "cantidad_enemigos" : 3,
             "coords_enemigos" : 
             [
                 {
-                    "coord_x": 730,
-                    "coord_y": 200
+                    "coord_x": 1100,
+                    "coord_y": 600
                 },
                 {
-                    "coord_x": 15,
-                    "coord_y": 600
+                    "coord_x": 1100,
+                    "coord_y": 250
+                },
+                {
+                    "coord_x": 25,
+                    "coord_y": 140
                 }
             ],
-            "cantidad_frutas" : 5,
+            "cantidad_frutas" : 6,
             "coords_frutas" : 
             [
                 {
-                    "coord_x" : 255,
-                    "coord_y" : 40
+                    "coord_x" : 330,
+                    "coord_y" : 530
                 },
                 {
-                    "coord_x" : 610,
-                    "coord_y" : 40
+                    "coord_x" : 745,
+                    "coord_y" : 350
                 },
                 {
-                    "coord_x" : 1060,
-                    "coord_y" : 400
+                    "coord_x" : 1150,
+                    "coord_y" : 470
                 },
                 {
-                    "coord_x" : 650,
-                    "coord_y" : 540
+                    "coord_x" : 1150,
+                    "coord_y" : 140
                 },
                 {
-                    "coord_x" : 90,
-                    "coord_y" : 330
+                    "coord_x" : 525,
+                    "coord_y" : 70
+                },
+                {
+                    "coord_x" : 295,
+                    "coord_y" : 70
                 }
 
             ],
@@ -456,37 +517,37 @@
             "coords_plataformas":
             [
                 {
-                    "coord_x": -40,
-                    "coord_y": 200,
-                    "ancho" : 1000,
-                    "alto" : 115
-                },
-                {
-                    "coord_x": 940,
-                    "coord_y": 600,
-                    "ancho" : 300,
-                    "alto" : 115
-                },
-                {
-                    "coord_x": 560,
-                    "coord_y": 600,
-                    "ancho" : 240,
-                    "alto" : 115
-                },
-                {
                     "coord_x": 20,
                     "coord_y": 600,
-                    "ancho" : 400,
+                    "ancho" : 600,
                     "alto" : 115
                 },
                 {
-                    "coord_x": 20,
-                    "coord_y": 400,
+                    "coord_x": 670,
+                    "coord_y": 420,
                     "ancho" : 200,
+                    "alto" : 75
+                },
+                {
+                    "coord_x": 890,
+                    "coord_y": 600,
+                    "ancho" : 345,
                     "alto" : 115
+                },
+                {
+                    "coord_x": 935,
+                    "coord_y": 280,
+                    "ancho" : 300,
+                    "alto" : 75
+                },
+                {
+                    "coord_x": 20,
+                    "coord_y": 140,
+                    "ancho" : 800,
+                    "alto" : 100
                 }
             ],
-            "cantidad_trampas" : 3,
+            "cantidad_trampas" : 7,
             "coords_trampas" : 
             [
                 {
@@ -496,14 +557,38 @@
                     "alto" : 100
                 },
                 {
-                    "coord_x": 200,
-                    "coord_y": 160,
+                    "coord_x": 380,
+                    "coord_y": 560,
                     "ancho" : 180,
                     "alto" : 100
                 },
                 {
-                    "coord_x": 550,
-                    "coord_y": 160,
+                    "coord_x": 980,
+                    "coord_y": 560,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 990,
+                    "coord_y": 230,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 120,
+                    "coord_y": 95,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 345,
+                    "coord_y": 95,
+                    "ancho" : 180,
+                    "alto" : 100
+                },
+                {
+                    "coord_x": 570,
+                    "coord_y": 95,
                     "ancho" : 180,
                     "alto" : 100
                 }

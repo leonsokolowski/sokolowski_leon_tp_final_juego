@@ -12,7 +12,6 @@ class Jugador(pg.sprite.Sprite):
         #Recibir daño
         self.vidas = 5
         self.is_alive = True
-        self.invulnerable = False
         #animacion
         self.sprites_jugador = self.config_jugador.get("sprites")
         self.__iddle_r = sf.get_surface_from_spritesheeet(self.sprites_jugador.get("iddle"), 7, 1)
@@ -63,6 +62,25 @@ class Jugador(pg.sprite.Sprite):
         #plataformas
         self.rect_feet_collition = pg.Rect(self.rect_hitbox.x + self.rect_hitbox.w/4, self.rect_hitbox.y + self.rect_hitbox.h - 5, self.rect_hitbox.w/2, 5)
         
+        #sonidos
+        self.sonidos_jugador = self.config_jugador.get("sonidos")
+        self.lista_sonidos_jugador = []
+        pg.mixer.pre_init(44100, -16, 2, 512)
+        self.sonido_salto = pg.mixer.Sound(self.sonidos_jugador.get("salto"))
+        self.lista_sonidos_jugador.append(self.sonido_salto)
+        self.sonido_ataque = pg.mixer.Sound(self.sonidos_jugador.get("ataque"))
+        self.lista_sonidos_jugador.append(self.sonido_ataque)
+        self.sonido_espada = pg.mixer.Sound(self.sonidos_jugador.get("espada"))
+        self.lista_sonidos_jugador.append(self.sonido_espada)
+        self.sonido_damage = pg.mixer.Sound(self.sonidos_jugador.get("damage"))
+        self.lista_sonidos_jugador.append(self.sonido_damage)
+        self.sonido_muerte = pg.mixer.Sound(self.sonidos_jugador.get("muerte"))
+        self.lista_sonidos_jugador.append(self.sonido_muerte)
+        self.sonido_manzana = pg.mixer.Sound(self.sonidos_jugador.get("manzana"))
+        self.lista_sonidos_jugador.append(self.sonido_manzana)
+        
+        for sonido in self.lista_sonidos_jugador:
+            sonido.set_volume(0.3)
         
     @property
     def obtener_estado_jumping (self):
@@ -86,8 +104,9 @@ class Jugador(pg.sprite.Sprite):
         self.__move_y = move_y
     
     def recibir_daño_y_comprobar_vidas (self):
-        if self.invulnerable == False:
-            self.vidas -= 1
+        self.vidas -= 1
+        if self.vidas > 0:
+            self.sonido_damage.play()
         if self.vidas <= 0:
             self.is_alive = False
             if self.__is_looking_right:
@@ -97,6 +116,7 @@ class Jugador(pg.sprite.Sprite):
             
     def morir (self):
         #Aca hacemos cosas que necesitamos que pasen antes de morir.
+        self.sonido_muerte.play()
         self.kill()
         
     
@@ -189,6 +209,8 @@ class Jugador(pg.sprite.Sprite):
         if self.cooldown_to_shoot():
             self.shoot_animation()
             self.projectile_group.add(self.create_projectile())
+            self.sonido_ataque.play()
+            self.sonido_espada.play()
             self.projectile_time = pg.time.get_ticks()
    
     def shoot_animation(self):

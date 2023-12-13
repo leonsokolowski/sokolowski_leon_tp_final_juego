@@ -14,6 +14,11 @@ class Juego:
         sprite_background = config_background.get("sprites")
         imagen_de_fondo = pg.image.load(sprite_background.get("background"))
         imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTANA))
+        #musica
+        musica = config_nivel.get("musica")
+        pg.mixer.music.load(musica.get("level"))
+        pg.mixer.music.set_volume(0.3)
+        pg.mixer.music.play(-1)
         #reloj
         reloj = pg.time.Clock()
         #nivel
@@ -49,6 +54,7 @@ class Juego:
                         break
                     case pg.KEYDOWN:
                         if event.key == pg.K_UP:
+                            juego.sprite_jugador.sonido_salto.play()
                             juego.sprite_jugador.jump()
                             juego.sprite_jugador.jump()
                             
