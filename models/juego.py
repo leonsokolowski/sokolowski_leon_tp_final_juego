@@ -16,6 +16,7 @@ class Juego:
         self.puntacion_3 = 0
         self.musica = open_configs().get("musica")
         self.musica_pausada = False
+        self.volumen_musica = 0.3
         
     def run_stage(self):
         #nivel
@@ -30,7 +31,7 @@ class Juego:
         #musica
         if self.musica_pausada == False:
             pg.mixer.music.load(self.musica.get("level"))
-            pg.mixer.music.set_volume(0.3)
+            pg.mixer.music.set_volume(self.volumen_musica)
             pg.mixer.music.play(-1)
         #reloj
         reloj = pg.time.Clock()
@@ -52,6 +53,7 @@ class Juego:
         tablon_madera_vidas = pg.transform.scale(tablon_madera_vidas, (tablon_madera_vidas.get_width() / 2.4, tablon_madera_vidas.get_height() / 3.5))
         
         ejecucion = True
+        cerrar_juego = False
         momento_anterior = pg.time.get_ticks() // 1000
         while ejecucion:
             if juego.victoria_1 == True:
@@ -69,6 +71,9 @@ class Juego:
                 print(self.puntacion_1)
                 print(self.puntacion_2)
                 print(self.puntacion_3)
+                self.victoria_juego()
+                ejecucion = False
+                
             lista_eventos = pg.event.get()
             
             for event in lista_eventos:
@@ -76,6 +81,7 @@ class Juego:
                     case pg.QUIT:
                         print("Estoy CERRANDO el juego")
                         ejecucion = False
+                        cerrar_juego = True
                         break
                     case pg.KEYDOWN:
                         if event.key == pg.K_UP:
@@ -110,7 +116,8 @@ class Juego:
             
             pg.display.update()
         
-        pg.quit()
+        if cerrar_juego:
+            pg.quit()
             
     def menu (self):
         configs_menu = open_configs().get("menu")
@@ -123,7 +130,7 @@ class Juego:
         lista_de_botones = []
         if self.musica_pausada == False:
             pg.mixer.music.load(self.musica.get("menu"))
-            pg.mixer.music.set_volume(0.3)
+            pg.mixer.music.set_volume(self.volumen_musica)
             pg.mixer.music.play(-1)
         menu_corriendo = True
         cerrar_juego = False
@@ -169,11 +176,14 @@ class Juego:
         configs_opciones = open_configs().get("menu")
         imagen_de_fondo = pg.image.load(configs_opciones.get("opciones"))
         imagen_boton = pg.image.load(configs_opciones.get("boton"))
+        imagen_boton_mas = pg.image.load(configs_opciones.get("boton_mas"))
+        imagen_boton_menos = pg.image.load(configs_opciones.get("boton_menos"))
         imagen_boton = pg.transform.scale(imagen_boton, (270, 80))
         fuente_menu = configs_opciones.get("fuentes")
         lista_de_botones = []
         primer_presion = False
         opciones_corriendo = True
+        cerrar_juego = False
         
         while opciones_corriendo:
             self.pantalla.blit(imagen_de_fondo, (0,0))
@@ -182,10 +192,10 @@ class Juego:
             
             boton_musica = Boton(imagen_boton, (649,295), "Musica", get_font(fuente_menu.get("palabras"), 60), "white", "red")
             lista_de_botones.append(boton_musica)
-            boton_mas_volumen = Boton(imagen_boton, (649,411), "+", get_font(fuente_menu.get("palabras"), 60), "white", "red")
-            lista_de_botones.append(boton_mas_volumen)
-            boton_menos_volumen = Boton(imagen_boton, (649,411), "-", get_font(fuente_menu.get("palabras"), 60), "white", "red")
-            lista_de_botones.append(boton_menos_volumen)
+            #boton_mas_volumen = Boton(imagen_boton_mas, (852,295), "", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            #lista_de_botones.append(boton_mas_volumen)
+            #boton_menos_volumen = Boton(imagen_boton_menos, (445,295), "", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            #lista_de_botones.append(boton_menos_volumen)
             boton_menu = Boton(imagen_boton, (649,531), "menu", get_font(fuente_menu.get("palabras"), 60), "white", "red")
             lista_de_botones.append(boton_menu)
             
@@ -195,7 +205,8 @@ class Juego:
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
+                    opciones_corriendo = False
+                    cerrar_juego = True
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.run_stage()
@@ -212,10 +223,25 @@ class Juego:
                         else:
                             pg.mixer_music.unpause()
                             primer_presion = False
-                        
-                    
-            
-                    
-                        
+                    # if boton_mas_volumen.check_for_input(posicion_del_mouse):
+                    #     if self.volumen_musica < 1.0:
+                    #         self.volumen_musica += 0.1
+                    # if boton_menos_volumen.check_for_input(posicion_del_mouse):
+                    #     if self.volumen_musica > 0.0:
+                    #         self.volumen_musica -= 0.1
+                                   
+            pg.display.update()
+        
+        if cerrar_juego:
+            pg.quit()  
+              
+    def victoria_juego(self):
+        configs_opciones = open_configs().get("menu")
+        imagen_victoria = pg.image.load(configs_opciones.get("victoria"))
+        corriendo_victoria = True
+        
+        while corriendo_victoria:
+            pg.mixer.music.stop()
+            self.pantalla.blit(imagen_victoria, (0,0))
             pg.display.update()
         

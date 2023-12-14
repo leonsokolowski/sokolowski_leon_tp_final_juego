@@ -10,7 +10,10 @@
     {
         "fondo" : "assets/gui/menus/menu_fondo.jpg",
         "boton" : "assets/gui/nivel/wooden_plank.png",
+        "boton_mas" : "assets/gui/menus/boton +.png",
+        "boton_menos" : "assets/gui/menus/boton -.png",
         "pausa" : "assets/gui/pausa/pausa.jpg",
+        "victoria" : "assets/gui/menus/victoria.jpg",
         "opciones" : "assets/gui/menus/opciones_fondo.jpg",
         "fuentes" : 
         { 
