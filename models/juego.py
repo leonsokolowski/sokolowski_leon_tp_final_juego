@@ -6,7 +6,7 @@ from auxiliar.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS, get_font, ope
 class Juego:
     def __init__(self):
         pg.init()
-        pg.display.set_caption("Hora de Aventura: ¡Derrota al Rey Helado y salva a la princesa!")
+        pg.display.set_caption("Hora de Aventura: Recoje las manzanas para Tronquitos")
         self.icono = pg.image.load("assets/gui/icono.png")
         pg.display.set_icon(self.icono)
         self.pantalla = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
@@ -15,6 +15,7 @@ class Juego:
         self.puntacion_2 = 0
         self.puntacion_3 = 0
         self.musica = open_configs().get("musica")
+        self.musica_pausada = False
         
     def run_stage(self):
         #nivel
@@ -27,10 +28,10 @@ class Juego:
         imagen_de_fondo = pg.image.load(sprite_background.get("background"))
         imagen_de_fondo = pg.transform.scale(imagen_de_fondo, (ANCHO_VENTANA, ALTO_VENTANA))
         #musica
-        
-        pg.mixer.music.load(self.musica.get("level"))
-        pg.mixer.music.set_volume(0.3)
-        pg.mixer.music.play(-1)
+        if self.musica_pausada == False:
+            pg.mixer.music.load(self.musica.get("level"))
+            pg.mixer.music.set_volume(0.3)
+            pg.mixer.music.play(-1)
         #reloj
         reloj = pg.time.Clock()
         #gui
@@ -54,15 +55,20 @@ class Juego:
         momento_anterior = pg.time.get_ticks() // 1000
         while ejecucion:
             if juego.victoria_1 == True:
-                print("caca")
-                
+                self.puntacion_1 = juego.sprite_jugador.puntaje
                 self.nivel_actual = "nivel_2"
                 juego = Nivel(self.pantalla, ANCHO_VENTANA, self.nivel_actual)
             
             if juego.victoria_2 == True:
+                self.puntacion_2 = juego.sprite_jugador.puntaje
                 self.nivel_actual = "nivel_3"
                 juego = Nivel(self.pantalla, ANCHO_VENTANA, self.nivel_actual)
             
+            if juego.victoria_3 == True:
+                self.puntacion_3 == juego.sprite_jugador.puntaje
+                print(self.puntacion_1)
+                print(self.puntacion_2)
+                print(self.puntacion_3)
             lista_eventos = pg.event.get()
             
             for event in lista_eventos:
@@ -114,9 +120,11 @@ class Juego:
         imagen_boton_opciones = pg.image.load(configs_menu.get("boton"))
         imagen_boton_opciones = pg.transform.scale(imagen_boton_opciones, (350, 80))
         fuente_menu = configs_menu.get("fuentes")
-        pg.mixer.music.load(self.musica.get("menu"))
-        pg.mixer.music.set_volume(0.3)
-        pg.mixer.music.play(-1)
+        lista_de_botones = []
+        if self.musica_pausada == False:
+            pg.mixer.music.load(self.musica.get("menu"))
+            pg.mixer.music.set_volume(0.3)
+            pg.mixer.music.play(-1)
         menu_corriendo = True
         cerrar_juego = False
         while menu_corriendo:
@@ -125,19 +133,21 @@ class Juego:
             posicion_del_mouse = pg.mouse.get_pos()
             
             boton_jugar = Boton(imagen_boton, (649,295), "Jugar", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_jugar)
             boton_opciones = Boton(imagen_boton_opciones, (649,411), "Opciones", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_opciones)
             boton_salir = Boton(imagen_boton, (649,531), "Salir", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_salir)
             
-            for boton in [boton_jugar, boton_opciones, boton_salir]:
+            for boton in lista_de_botones:
                 boton.change_color(posicion_del_mouse)
                 boton.update(self.pantalla)
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
+                    menu_corriendo = False
+                    cerrar_juego = True
                     pg.quit()
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        self.run_stage()
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if boton_jugar.check_for_input(posicion_del_mouse):
@@ -156,7 +166,56 @@ class Juego:
             pg.quit()
         
     def opciones(self):
-        configs_menu = open_configs().get("menu")
-        fuente_menu = configs_menu.get("fuentes")
+        configs_opciones = open_configs().get("menu")
+        imagen_de_fondo = pg.image.load(configs_opciones.get("opciones"))
+        imagen_boton = pg.image.load(configs_opciones.get("boton"))
+        imagen_boton = pg.transform.scale(imagen_boton, (270, 80))
+        fuente_menu = configs_opciones.get("fuentes")
+        lista_de_botones = []
+        primer_presion = False
         opciones_corriendo = True
+        
+        while opciones_corriendo:
+            self.pantalla.blit(imagen_de_fondo, (0,0))
+            
+            posicion_del_mouse = pg.mouse.get_pos()
+            
+            boton_musica = Boton(imagen_boton, (649,295), "Musica", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_musica)
+            boton_mas_volumen = Boton(imagen_boton, (649,411), "+", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_mas_volumen)
+            boton_menos_volumen = Boton(imagen_boton, (649,411), "-", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_menos_volumen)
+            boton_menu = Boton(imagen_boton, (649,531), "menu", get_font(fuente_menu.get("palabras"), 60), "white", "red")
+            lista_de_botones.append(boton_menu)
+            
+            for boton in lista_de_botones:
+                boton.change_color(posicion_del_mouse)
+                boton.update(self.pantalla)
+            
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        self.run_stage()
+
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if boton_menu.check_for_input(posicion_del_mouse):
+                        self.menu()
+                        opciones_corriendo = False
+                    if boton_musica.check_for_input(posicion_del_mouse):
+                        if primer_presion == False:
+                            pg.mixer_music.pause()
+                            self.musica_pausada = True
+                            primer_presion = True
+                        else:
+                            pg.mixer_music.unpause()
+                            primer_presion = False
+                        
+                    
+            
+                    
+                        
+            pg.display.update()
         

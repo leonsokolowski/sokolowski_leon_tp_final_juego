@@ -11,6 +11,7 @@
         "fondo" : "assets/gui/menus/menu_fondo.jpg",
         "boton" : "assets/gui/nivel/wooden_plank.png",
         "pausa" : "assets/gui/pausa/pausa.jpg",
+        "opciones" : "assets/gui/menus/opciones_fondo.jpg",
         "fuentes" : 
         { 
             "palabras" : "assets/font/words_font.ttf",
