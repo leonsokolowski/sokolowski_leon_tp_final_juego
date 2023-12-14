@@ -16,7 +16,7 @@ class Juego:
         self.puntacion_3 = 0
         self.musica = open_configs().get("musica")
         self.musica_pausada = False
-        self.volumen_musica = 0.2
+        self.volumen_musica = 0.1
         
     def run_stage(self):
         #nivel
@@ -62,12 +62,12 @@ class Juego:
                 juego = Nivel(self.pantalla, ANCHO_VENTANA, self.nivel_actual)
             
             if juego.victoria_2 == True:
-                self.puntacion_2 = juego.sprite_jugador.puntaje
+                self.puntacion_2 = juego.sprite_jugador.puntaje + self.puntacion_1
                 self.nivel_actual = "nivel_3"
                 juego = Nivel(self.pantalla, ANCHO_VENTANA, self.nivel_actual)
             
             if juego.victoria_3 == True:
-                self.puntacion_3 == juego.sprite_jugador.puntaje
+                self.puntacion_3 == juego.sprite_jugador.puntaje + self.puntacion_2
                 print(self.puntacion_1)
                 print(self.puntacion_2)
                 print(self.puntacion_3)
@@ -176,8 +176,8 @@ class Juego:
         configs_opciones = open_configs().get("menu")
         imagen_de_fondo = pg.image.load(configs_opciones.get("opciones"))
         imagen_boton = pg.image.load(configs_opciones.get("boton"))
-        imagen_boton_mas = pg.image.load(configs_opciones.get("boton_mas"))
-        imagen_boton_menos = pg.image.load(configs_opciones.get("boton_menos"))
+        #imagen_boton_mas = pg.image.load(configs_opciones.get("boton_mas"))
+        #imagen_boton_menos = pg.image.load(configs_opciones.get("boton_menos"))
         imagen_boton = pg.transform.scale(imagen_boton, (270, 80))
         fuente_menu = configs_opciones.get("fuentes")
         lista_de_botones = []
