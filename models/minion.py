@@ -62,7 +62,7 @@ class Minion(pg.sprite.Sprite):
         self.lista_sonidos_minion.append(self.sonido_muerte)
         
         for sonido in self.lista_sonidos_minion:
-            sonido.set_volume(0.3)
+            sonido.set_volume(0.2)
     
     def minion_recibir_daño_y_comprobar_vidas(self):
         self.vidas -= 1

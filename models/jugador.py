@@ -80,7 +80,7 @@ class Jugador(pg.sprite.Sprite):
         self.lista_sonidos_jugador.append(self.sonido_manzana)
         
         for sonido in self.lista_sonidos_jugador:
-            sonido.set_volume(0.3)
+            sonido.set_volume(0.2)
         
     @property
     def obtener_estado_jumping (self):

@@ -16,7 +16,7 @@ class Juego:
         self.puntacion_3 = 0
         self.musica = open_configs().get("musica")
         self.musica_pausada = False
-        self.volumen_musica = 0.3
+        self.volumen_musica = 0.2
         
     def run_stage(self):
         #nivel
