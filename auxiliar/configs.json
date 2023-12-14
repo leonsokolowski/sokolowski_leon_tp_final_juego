@@ -1,4 +1,22 @@
 {
+    "musica" : 
+    {   
+        "menu" : "assets/banda_sonora/musica/menu.mp3",
+        "level" : "assets/banda_sonora/musica/level.mp3",
+        "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3",
+        "pausa" : "assets/banda_sonora/musica/pausa.mp3"
+    },
+    "menu" : 
+    {
+        "fondo" : "assets/gui/menus/menu_fondo.jpg",
+        "boton" : "assets/gui/nivel/wooden_plank.png",
+        "pausa" : "assets/gui/pausa/pausa.jpg",
+        "fuentes" : 
+        { 
+            "palabras" : "assets/font/words_font.ttf",
+            "numeros" : "assets/font/numbers_font.ttf"
+        }
+    },
     "nivel_1" : 
     {
         "background" : 
@@ -12,19 +30,13 @@
         {
             "images" :
             {
-                "tablon_madera" : "assets/gui/wooden_plank.png"
+                "tablon_madera" : "assets/gui/nivel/wooden_plank.png"
             }
         },
         "fuentes" : 
         { 
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
-        },
-        "musica" : 
-        {   
-            "menu" : "assets/banda_sonora/musica/menu.mp3",
-            "level" : "assets/banda_sonora/musica/level.mp3",
-            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
         },
         "jugador" : 
         {
@@ -208,19 +220,13 @@
         {
             "images" :
             {
-                "tablon_madera" : "assets/gui/wooden_plank.png"
+                "tablon_madera" : "assets/gui/nivel/wooden_plank.png"
             }
         },
         "fuentes" : 
         { 
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
-        },
-        "musica" : 
-        {   
-            "menu" : "assets/banda_sonora/musica/menu.mp3",
-            "level" : "assets/banda_sonora/musica/level.mp3",
-            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
         },
         "jugador" : 
         {
@@ -398,19 +404,13 @@
         {
             "images" :
             {
-                "tablon_madera" : "assets/gui/wooden_plank.png"
+                "tablon_madera" : "assets/gui/nivel/wooden_plank.png"
             }
         },
         "fuentes" : 
         { 
             "palabras" : "assets/font/words_font.ttf",
             "numeros" : "assets/font/numbers_font.ttf"
-        },
-        "musica" : 
-        {   
-            "menu" : "assets/banda_sonora/musica/menu.mp3",
-            "level" : "assets/banda_sonora/musica/level.mp3",
-            "musica_posible" : "assets/banda_sonora/musica/level_posible.mp3"
         },
         "jugador" : 
         {
@@ -529,7 +529,7 @@
             "coords_plataformas":
             [
                 {
-                    "coord_x": 20,
+                    "coord_x": 0,
                     "coord_y": 600,
                     "ancho" : 600,
                     "alto" : 115

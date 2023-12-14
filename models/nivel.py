@@ -35,7 +35,7 @@ class Nivel:
             case "nivel_1":
                 self.sprite_jugador = Jugador(0, 600, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
             case "nivel_2":
-                self.sprite_jugador = Jugador(0, 0, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
+                self.sprite_jugador = Jugador(0, 100, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
             case "nivel_3":
                 self.sprite_jugador = Jugador(0, 500, self.config_nivel, frame_rate= 70, speed_walk= 10, speed_run= 20)
         self.jugador = pg.sprite.GroupSingle(self.sprite_jugador)
@@ -46,7 +46,9 @@ class Nivel:
         self.cordenadas_enemigos = self.config_nivel_actual.get("coords_enemigos")
         self.pantalla = pantalla
         self.limite_x = limite_x
-        self.victoria = False
+        self.victoria_1 = False
+        self.victoria_2 = False
+        self.victoria_3 = False
         self.spawnear_minions()
         
         #Atributos de las frutas
@@ -112,12 +114,14 @@ class Nivel:
             #Disparo Jugador a Minions
             if self.sprite_jugador.is_alive:
                 for projectile in self.sprite_jugador.get_projectiles:
-                    cantidad_minions_antes = len(self.minions)
                     for minion in self.minions:
+                        cantidad_minions_antes = len(self.minions)
+                        print(f"antes{cantidad_minions_antes}")
                         if projectile.rect.colliderect(minion.rect):
                             minion.minion_recibir_daño_y_comprobar_vidas()
                             projectile.kill()
-                            cantidad_minions_despues = len(self.minions)
+                            cantidad_minions_despues = len(self.minions) - 1
+                            print(f"despues{cantidad_minions_despues}")
                             if cantidad_minions_antes > cantidad_minions_despues:
                                 cantidad_vencido = cantidad_minions_antes - cantidad_minions_despues
                                 self.sprite_jugador.puntaje += cantidad_vencido * 100
@@ -203,8 +207,16 @@ class Nivel:
                             self.sprite_jugador.puntaje += cantidad_frutas_recogidas * 100
                             print(f'Puntaje actual: {self.sprite_jugador.puntaje} Puntos')
                 
-            if len(self.minions) == 0 and len(self.frutas) == 0 and not self.victoria:
-                self.victoria = True
+            if len(self.minions) == 0 and len(self.frutas) == 0:
+                match self.nivel_actual:
+                    case "nivel_1":
+                        print(self.victoria_1)
+                        self.victoria_1 = True
+                        print(self.victoria_1)
+                    case "nivel_2":
+                        self.victoria_2 = True
+                    case "nivel_3":
+                        self.victoria_3 = True
                 print(f'Ganaste la partida con: {self.sprite_jugador.puntaje} Puntos!') 
             
             
