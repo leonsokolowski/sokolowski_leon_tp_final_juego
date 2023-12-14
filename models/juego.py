@@ -207,9 +207,7 @@ class Juego:
                 if event.type == pg.QUIT:
                     opciones_corriendo = False
                     cerrar_juego = True
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        self.run_stage()
+
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if boton_menu.check_for_input(posicion_del_mouse):
@@ -222,6 +220,7 @@ class Juego:
                             primer_presion = True
                         else:
                             pg.mixer_music.unpause()
+                            self.musica_pausada = False
                             primer_presion = False
                     # if boton_mas_volumen.check_for_input(posicion_del_mouse):
                     #     if self.volumen_musica < 1.0:
@@ -239,9 +238,19 @@ class Juego:
         configs_opciones = open_configs().get("menu")
         imagen_victoria = pg.image.load(configs_opciones.get("victoria"))
         corriendo_victoria = True
+        cerrar_juego = False
         
         while corriendo_victoria:
             pg.mixer.music.stop()
             self.pantalla.blit(imagen_victoria, (0,0))
+            
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    corriendo_victoria = False
+                    cerrar_juego = True
+                
+        
             pg.display.update()
         
+        if cerrar_juego:
+            pg.quit()
