@@ -6,7 +6,7 @@ from auxiliar.constantes import (ANCHO_VENTANA, ALTO_VENTANA, FPS, get_font, ope
 class Juego:
     def __init__(self):
         pg.init()
-        pg.display.set_caption("Hora de Aventura: Recoje las manzanas para Tronquitos")
+        pg.display.set_caption("Hora de Aventura: Recoge las manzanas para Tronquitos")
         self.icono = pg.image.load("assets/gui/icono.png")
         pg.display.set_icon(self.icono)
         self.pantalla = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
